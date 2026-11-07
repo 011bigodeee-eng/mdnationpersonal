@@ -7,7 +7,6 @@ import {
   MessageCircle,
   ArrowUpRight,
   ArrowRight,
-  ArrowDown,
   Menu,
   X,
   Dumbbell,
@@ -17,7 +16,6 @@ import {
   TrendingUp,
   Check,
   Instagram,
-  Play,
   Plus,
   ScanLine,
 } from "lucide-react";
@@ -33,6 +31,8 @@ import {
 } from "@/lib/content";
 
 import CinematicFilm from "./CinematicFilm";
+import Hero from "./Hero";
+import BrandMarquee from "./BrandMarquee";
 import dynamic from "next/dynamic";
 import { Wordmark, Eyebrow, SectionTitle, ContactButton } from "./Primitives";
 import Modal from "./Modal";
@@ -219,89 +219,6 @@ function Navbar({ contact }: { contact: () => void }) {
         <p>BUILT BY DISCIPLINE.</p>
       </dialog>
     </header>
-  );
-}
-function Hero({ contact }: { contact: () => void }) {
-  return (
-    <section
-      className={`hero ${client.trainerPhoto ? "hero--real" : ""}`}
-      id="inicio"
-      data-scroll-scene
-    >
-      <div className="hero-atmosphere" />
-      <div className="hero-visual">
-        <Image
-          className="hero-image"
-          src={client.trainerPhoto ?? media.hero}
-          alt={
-            client.trainerPhoto
-              ? "Matheus Dias, personal trainer"
-              : "Academia com rack, banco e iluminação dramática. Imagem conceitual gerada por IA."
-          }
-          fill
-          priority
-          fetchPriority="high"
-          sizes="(max-width: 680px) 100vw, 55vw"
-          quality={85}
-        />
-        <div className="hero-shade" />
-        <span className="hero-photo-caption">
-          {client.trainerPhoto
-            ? "MATHEUS DIAS / FOTOGRAFIA REAL"
-            : "ESTUDO DE ATMOSFERA / IMAGEM CONCEITUAL · IA"}
-        </span>
-        <div className="hero-visual-index">
-          <span>MD</span>
-          <small>
-            FOCO NO PROCESSO.
-            <br />
-            FORÇA NA CONSTÂNCIA.
-          </small>
-        </div>
-      </div>
-      <div className="container hero-content">
-        <div className="hero-kicker">
-          <span className="live-dot" /> MATHEUS DIAS{" "}
-          <span className="kicker-divider" /> PERSONAL TRAINER & COACH
-        </div>
-        <div className="hero-title-wrap">
-          <span className="hero-edition">01 — A DECISÃO</span>
-          <h1>
-            <span>SUA EVOLUÇÃO</span>
-            <span>COMEÇA COM</span>
-            <em>UMA DECISÃO.</em>
-          </h1>
-        </div>
-        <p>
-          Treinamento com estratégia, acompanhamento individualizado e foco na
-          sua evolução.
-        </p>
-        <div className="hero-actions">
-          <ContactButton onClick={contact}>QUERO COMEÇAR AGORA</ContactButton>
-          <a className="hero-method-link" href="#metodo">
-            <span>
-              <Play size={13} />
-            </span>
-            CONHECER O MÉTODO
-          </a>
-        </div>
-        <div className="hero-bottom-note">
-          <span>DISCIPLINA NO PRESENTE.</span>
-          <span>EVOLUÇÃO NO CAMINHO.</span>
-        </div>
-      </div>
-      <div className="hero-bottom">
-        <a className="scroll-cue" href="#sobre">
-          <span className="scroll-line" />
-          <span>CONTINUE A JORNADA</span>
-          <ArrowDown size={16} />
-        </a>
-        <span>
-          BUILT BY DISCIPLINE <i>+</i>
-        </span>
-        <span className="hero-page-number">001 / MD NATION</span>
-      </div>
-    </section>
   );
 }
 function AboutTrainer() {
@@ -855,16 +772,7 @@ export default function LandingPage() {
       <Navbar contact={() => contact()} />
       <main id="main">
         <Hero contact={() => contact()} />
-        <div className="brand-strip">
-          <span>MD NATION</span>
-          <i>+</i>
-          <span>BUILT BY DISCIPLINE</span>
-          <i>+</i>
-          <span>MOVIDO POR EVOLUÇÃO</span>
-          <i>+</i>
-          <span>SEU PRÓXIMO NÍVEL</span>
-          <i>+</i>
-        </div>
+        <BrandMarquee />
         <AboutTrainer />
         <Services contact={contact} />
         <Method contact={() => contact()} />

@@ -30,8 +30,10 @@ Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em out
 
 - `app/page.tsx`: entrada da página.
 - `app/layout.tsx`: fontes locais, idioma, metadata e Open Graph condicional ao domínio.
-- `app/globals.css`: sistema visual, seções, responsividade e movimento reduzido.
-- `components/LandingPage.tsx`: composição da página, Navbar, CinematicIntro, Hero, AboutTrainer, Services, Method, Results, Testimonials, FAQ, FinalCTA e Footer.
+- `app/globals.css`: sistema visual e estilos das demais seções.
+- `app/hero.css`: Hero, faixa contínua, breakpoints próprios e movimento reduzido, sem overrides espalhados.
+- `components/LandingPage.tsx`: composição da página, Navbar, CinematicIntro, AboutTrainer, Services, Method, Results, Testimonials, FAQ, FinalCTA e Footer.
+- `components/Hero.tsx` e `BrandMarquee.tsx`: Hero com ordem natural no HTML e faixa com pausa acessível.
 - `components/GoalsQuiz.tsx`, `Gallery.tsx` e `TrainingExperience.tsx`: interações preservadas, em chunks separados.
 - `components/CinematicFilm.tsx`: manifesto expansivo, com foto estática e vídeo autorizado opcional.
 - `components/Primitives.tsx`, `Modal.tsx`, `hooks/useCinematicMotion.ts`: elementos compartilhados, diálogos e movimento progressivo.
@@ -89,3 +91,7 @@ Os PNGs enviados estão intactos em `assets/originals/matheus/`. O manifesto reg
 O tratamento visual usa somente contraste, luminosidade e saturação moderados por CSS, mais gradientes sobrepostos. O desktop mantém a fotografia íntegra em uma área própria à direita. No mobile, a área fotográfica quadrada vem após o texto e os botões, evitando sobreposição com o rosto. A foto de jiu-jítsu mantém a proporção e o contexto, sem atribuir títulos, graduação ou conquistas.
 
 A integração e sua validação estão descritas em `docs/PHOTOGRAPHY.md`.
+
+## Correção da Hero desktop e mobile
+
+O diagnóstico, a consolidação do CSS e os testes com carregamento atrasado estão em `docs/HERO_CORRECTION.md`. A versão mobile segue identificação, título, subtítulo, CTA, fotografia e continuidade, sem depender de `order` ou altura fixa. A faixa pode ser pausada e fica estática quando há preferência por movimento reduzido.
