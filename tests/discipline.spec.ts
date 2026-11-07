@@ -6,7 +6,7 @@ for (const width of [320, 390, 768, 1440]) {
   }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    await page.getByRole("button", { name: "Pular introdução" }).click();
+    await expect(page.getByRole("dialog", { name: "Abertura MD Nation" })).not.toBeVisible({ timeout: 3500 });
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator(".discipline-transition");
     await expect(page.locator(".brand-strip")).toHaveCount(0);

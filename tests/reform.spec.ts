@@ -84,7 +84,7 @@ test("movimento real progride sem bloquear a rolagem; modo reduzido continua leg
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await page.getByRole("button", { name: "Pular introdução" }).click();
+  await expect(page.getByRole("dialog", { name: "Abertura MD Nation" })).not.toBeVisible({ timeout: 3500 });
   const method = page.locator("#metodo");
   await method.scrollIntoViewIfNeeded();
   await expect

@@ -102,9 +102,6 @@ function CinematicIntro() {
       <span className="intro-edition">MD NATION / BRAND EXPERIENCE</span>
       <Wordmark />
       <p>BUILT BY DISCIPLINE.</p>
-      <button onClick={dismiss}>
-        Pular introdução <ArrowRight size={15} />
-      </button>
     </dialog>
   ) : null;
 }

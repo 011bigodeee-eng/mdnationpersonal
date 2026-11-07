@@ -124,13 +124,14 @@ test("questionário, consentimento, resumo e mensagem de contato", async ({
   await page.keyboard.press("Escape");
 });
 
-test("abertura pode ser pulada, galeria e mockup respondem", async ({
+test("abertura termina automaticamente, galeria e mockup respondem", async ({
   page,
 }) => {
   await page.goto("/");
   const intro = page.getByRole("dialog", { name: "Abertura MD Nation" });
   await expect(intro).toBeVisible();
-  await page.getByRole("button", { name: "Pular introdução" }).click();
+  await expect(page.getByRole("button", { name: "Pular introdução" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Abertura MD Nation" })).not.toBeVisible({ timeout: 3500 });
   await expect(intro).not.toBeVisible();
   await page.getByTitle("Ver dia 3 da semana demonstrativa").click();
   await expect(page.locator(".phone-workout h4")).toHaveText("Foco & técnica");
