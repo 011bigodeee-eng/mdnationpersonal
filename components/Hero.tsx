@@ -57,7 +57,7 @@ export default function Hero({ contact }: { contact: () => void }) {
           alt={
             client.trainerPhoto
               ? "Matheus Dias na academia, de braços cruzados, com a camiseta original Musculação Faixa Preta."
-              : "Academia com iluminação dramática. Imagem conceitual."
+              : "Academia com iluminação dramática."
           }
           fill
           priority
@@ -69,7 +69,7 @@ export default function Hero({ contact }: { contact: () => void }) {
         <span className="hero-photo-caption">
           {client.trainerPhoto
             ? "MATHEUS DIAS / MD NATION"
-            : "IMAGEM CONCEITUAL · IA"}
+            : "MD NATION"}
         </span>
         <div className="hero-visual-index" aria-hidden="true">
           <span>MD</span>

@@ -294,7 +294,7 @@ function AboutTrainer() {
                 alt={
                   client.trainerAboutPhoto
                     ? "Matheus Dias de quimono branco durante a prática de jiu-jítsu. Fotografia real fornecida pelo cliente."
-                    : "Texturas de cordas em um ambiente de treinamento. Imagem conceitual."
+                    : "Texturas de cordas em um ambiente de treinamento."
                 }
                 fill
                 sizes="(max-width:680px) 100vw, 45vw"
@@ -315,7 +315,7 @@ function AboutTrainer() {
               <small>
                 {client.trainerAboutPhoto
                   ? "MATHEUS DIAS · FOTOGRAFIA REAL"
-                  : "IMAGEM CONCEITUAL · IA"}
+                  : "MD NATION"}
               </small>
             </div>
             <span className="about-caption">
@@ -540,7 +540,7 @@ function Results() {
             <>
               <Image
                 src={media.evolution}
-                alt="Tênis de treinamento e corda sobre o piso. Imagem conceitual gerada por IA."
+                alt="Tênis de treinamento e corda sobre o piso."
                 fill
                 sizes="(max-width:850px) 100vw, 50vw"
               />
@@ -553,7 +553,6 @@ function Results() {
                   <br />
                   <em>EM CONSTRUÇÃO.</em>
                 </span>
-                <small>REFLEXÃO EDITORIAL · IMAGEM CONCEITUAL / IA</small>
               </div>
             </>
           )}
@@ -670,7 +669,7 @@ function FinalCTA({ contact }: { contact: () => void }) {
     <section id="contato" className="final-cta" data-scroll-scene>
       <Image
         src={media.cta}
-        alt="Corredor de academia com iluminação vermelha. Imagem conceitual."
+        alt="Corredor de academia com iluminação vermelha."
         fill
         sizes="100vw"
       />
@@ -695,7 +694,6 @@ function FinalCTA({ contact }: { contact: () => void }) {
             QUERO INICIAR MEU ACOMPANHAMENTO
           </ContactButton>
         </div>
-        <span className="cta-credit">IMAGEM CONCEITUAL · IA</span>
       </div>
     </section>
   );

@@ -59,9 +59,9 @@ export default function Gallery({
                 quality={item.kind === "real" ? 85 : 75}
                 sizes="(max-width:680px) 90vw, (max-width:1024px) 50vw, 55vw"
               />
-              <span className="gallery-photo-kind">
-                {item.kind === "real" ? "FOTOGRAFIA REAL" : "CONCEITO · IA"}
-              </span>
+              {item.kind === "real" && (
+                <span className="gallery-photo-kind">FOTOGRAFIA REAL</span>
+              )}
               <span className="gallery-photo-caption">
                 <small>{item.context}</small>
                 {item.title}
@@ -120,7 +120,7 @@ export default function Gallery({
           <p className="modal-caption">
             {selected.kind === "real"
               ? selected.caption
-              : "Composição editorial gerada por IA. Não representa o local de atendimento."}
+              : "Cenário de treinamento. Não representa o local de atendimento."}
           </p>
         </Modal>
       )}

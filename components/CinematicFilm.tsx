@@ -60,12 +60,10 @@ export default function CinematicFilm() {
                 É no que você repete.
                 <br />É no que você constrói.
               </p>
-              {media.featuredVideo ? (
+              {media.featuredVideo && (
                 <button className="film-play" onClick={() => setPlaying(true)}>
                   <Play size={17} /> ASSISTIR AO FILME <VolumeX size={16} />
                 </button>
-              ) : (
-                <span>COMPOSIÇÃO CONCEITUAL · IA</span>
               )}
             </div>
           </>

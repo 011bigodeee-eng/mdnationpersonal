@@ -25,7 +25,7 @@ export const services = [
     description:
       "A possibilidade de ter orientação próxima, com atenção ao movimento e ao seu processo.",
     image: "/images/service-strength.webp",
-    imageAlt: "Halter sobre piso de academia. Imagem conceitual.",
+    imageAlt: "Halter sobre piso de academia.",
     icon: "dumbbell",
   },
   {
@@ -34,7 +34,7 @@ export const services = [
     description:
       "Orientação à distância para aproximar seu objetivo da sua rotina, onde você estiver.",
     image: "/images/service-online.webp",
-    imageAlt: "Notebook em um ambiente de treinamento. Imagem conceitual.",
+    imageAlt: "Notebook em um ambiente de treinamento.",
     icon: "monitor",
   },
   {
@@ -43,7 +43,7 @@ export const services = [
     description:
       "Uma proposta de planejamento que considera objetivos, experiência e rotina.",
     image: "/images/service-plan.webp",
-    imageAlt: "Caderno e equipamentos de planejamento. Imagem conceitual.",
+    imageAlt: "Caderno e equipamentos de planejamento.",
     icon: "clipboard",
   },
 ];
@@ -132,9 +132,9 @@ export const media = {
       src: "/images/gym.webp",
       title: "O AMBIENTE",
       caption:
-        "Composição de academia e anilhas. Imagem conceitual gerada por IA.",
+        "Composição de academia e anilhas.",
       kind: "concept" as const,
-      context: "ATMOSFERA / IMAGEM CONCEITUAL · IA",
+      context: "ATMOSFERA / TREINAMENTO",
     },
   ],
 };
