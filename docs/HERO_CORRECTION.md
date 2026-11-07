@@ -38,3 +38,7 @@ Capturas novas: `/workspace/scratch/md-hero-corrected-320.png`, `md-hero-correct
 - Desktop 1440 px mantém a Hero de 900 px, com fotografia à direita e tipografia monumental.
 - Uma inspeção adicional de headings, parágrafos, botões, seleções, FAQ e navegação do rodapé em 320, 390, 768, 1024 e 1440 px não encontrou conteúdo ultrapassando a largura dos respectivos blocos.
 - As fotografias e os originais arquivados não foram modificados.
+
+## Separação integral entre título e fotografia
+
+Após o relato de “EVOLUÇÃO” entrando na foto, a Hero passou a reservar uma coluna de texto cuja largura termina antes da área fotográfica. A fonte acompanha essa largura com unidades do container, preservando as três linhas completas. A fotografia mantém sua posição. A verificação anterior protegia somente o rosto; os novos testes exigem separação de toda a área da foto em 851, 1024, 1440 e 1920 px, incluindo os controles. Build, lint, tipos e os 42 testes passaram.

@@ -1,3 +1,17 @@
+.hero {
+  --hero-visual-width: min(56vw, 1050px);
+  --hero-content-edge: max(56px, calc((100vw - 1320px) / 2));
+}
+.hero-copy {
+  width: calc(
+    100vw - var(--hero-visual-width) - var(--hero-content-edge) - 32px
+  );
+  container-type: inline-size;
+}
+.hero-actions,
+.hero-bottom-note {
+  flex-wrap: wrap;
+}
 /* Hero owns its complete responsive layout. No ordering rules live in globals.css. */
 .hero {
   position: relative;
@@ -60,7 +74,7 @@
   color: #9c9ea8;
 }
 .hero h1 {
-  font: 700 clamp(86px, 8.8vw, 126px)/0.9 var(--display);
+  font: 700 clamp(54px, 19cqw, 126px)/0.9 var(--display);
   letter-spacing: -1.5px;
   max-width: 850px;
 }
@@ -71,7 +85,7 @@
 .hero h1 > em {
   font-weight: 800;
 }
-.hero-content > p {
+.hero-copy > p {
   max-width: 385px;
   font-size: 14px;
   line-height: 1.8;
@@ -350,20 +364,14 @@ html[data-md-intro="skip"] .hero-visual {
   .hero-content {
     padding-top: 112px;
   }
-  .hero h1 {
-    font-size: 140px;
-  }
   .hero-visual {
     width: 55%;
   }
-  .hero-content > p {
+  .hero-copy > p {
     max-width: 420px;
   }
 }
 @media (min-width: 851px) and (max-width: 1100px) {
-  .hero h1 {
-    font-size: clamp(83px, 9vw, 104px);
-  }
   .hero-content {
     padding-top: 105px;
   }
@@ -417,7 +425,7 @@ html[data-md-intro="skip"] .hero-visual {
   .hero-edition {
     display: none;
   }
-  .hero-content > p {
+  .hero-copy > p {
     max-width: 410px;
     margin: 22px 0;
     font-size: 13px;
@@ -559,7 +567,7 @@ html[data-md-intro="skip"] .hero-visual {
     line-height: 0.95;
     letter-spacing: -0.55px;
   }
-  .hero-content > p {
+  .hero-copy > p {
     font-size: 12px;
     line-height: 1.75;
     margin: 19px 0 20px;
@@ -655,7 +663,7 @@ html[data-md-intro="skip"] .hero-visual {
   .hero h1 {
     font-size: clamp(45px, 13.6vw, 49px);
   }
-  .hero-content > p {
+  .hero-copy > p {
     font-size: 11px;
     margin: 18px 0 18px;
     max-width: 300px;
@@ -759,4 +767,23 @@ html[data-md-intro="skip"] .hero-visual {
 .brand-strip-set {
   min-width: 100vw;
   justify-content: space-around;
+}
+@media (min-width: 1600px) {
+  .hero {
+    --hero-visual-width: min(55vw, 1050px);
+  }
+}
+@media (min-width: 851px) and (max-width: 1100px) {
+  .hero {
+    --hero-content-edge: 36px;
+  }
+}
+@media (max-width: 850px) {
+  .hero-copy {
+    width: 100%;
+    container-type: normal;
+  }
+  .hero-actions {
+    flex-wrap: nowrap;
+  }
 }

@@ -14,38 +14,40 @@ export default function Hero({ contact }: { contact: () => void }) {
     >
       <div className="hero-atmosphere" aria-hidden="true" />
       <div className="container hero-content">
-        <div className="hero-kicker">
-          <span className="live-dot" />
-          MATHEUS DIAS
-          <span className="kicker-divider" />
-          PERSONAL TRAINER & COACH
-        </div>
-        <div className="hero-title-wrap">
-          <span className="hero-edition">01 — A DECISÃO</span>
-          <h1>
-            <span>SUA EVOLUÇÃO</span>
-            <span>COMEÇA COM</span>
-            <em>UMA DECISÃO.</em>
-          </h1>
-        </div>
-        <p>
-          Treinamento com estratégia, acompanhamento individualizado e foco na
-          sua evolução.
-        </p>
-        <div className="hero-actions">
-          <ContactButton onClick={contact}>QUERO COMEÇAR AGORA</ContactButton>
-          <a className="hero-method-link" href="#metodo">
-            <span className="hero-play">
-              <Play size={12} />
-            </span>
-            <span>
-              <span className="hero-method-full">CONHECER O </span>MÉTODO
-            </span>
-          </a>
-        </div>
-        <div className="hero-bottom-note">
-          <span>DISCIPLINA NO PRESENTE.</span>
-          <span>EVOLUÇÃO NO CAMINHO.</span>
+        <div className="hero-copy">
+          <div className="hero-kicker">
+            <span className="live-dot" />
+            MATHEUS DIAS
+            <span className="kicker-divider" />
+            PERSONAL TRAINER & COACH
+          </div>
+          <div className="hero-title-wrap">
+            <span className="hero-edition">01 — A DECISÃO</span>
+            <h1>
+              <span>SUA EVOLUÇÃO</span>
+              <span>COMEÇA COM</span>
+              <em>UMA DECISÃO.</em>
+            </h1>
+          </div>
+          <p>
+            Treinamento com estratégia, acompanhamento individualizado e foco na
+            sua evolução.
+          </p>
+          <div className="hero-actions">
+            <ContactButton onClick={contact}>QUERO COMEÇAR AGORA</ContactButton>
+            <a className="hero-method-link" href="#metodo">
+              <span className="hero-play">
+                <Play size={12} />
+              </span>
+              <span>
+                <span className="hero-method-full">CONHECER O </span>MÉTODO
+              </span>
+            </a>
+          </div>
+          <div className="hero-bottom-note">
+            <span>DISCIPLINA NO PRESENTE.</span>
+            <span>EVOLUÇÃO NO CAMINHO.</span>
+          </div>
         </div>
       </div>
       <div className="hero-visual">

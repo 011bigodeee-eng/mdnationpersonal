@@ -140,3 +140,45 @@ test("faixa contínua pode ser pausada e respeita movimento reduzido", async ({
   await expect(region.getByRole("button")).toHaveCount(0);
   await expect(region.locator(".brand-strip-set").first()).toBeVisible();
 });
+
+for (const width of [851, 1024, 1440, 1920]) {
+  test(`título inteiro permanece fora da área da fotografia em ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const photo = (await page.locator(".hero-visual").boundingBox())!;
+    const lines = await page.locator("h1").evaluate((h) =>
+      Array.from(h.querySelectorAll("span,em")).map((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const r = range.getBoundingClientRect();
+        return {
+          right: r.right,
+          height: r.height,
+          fontSize: parseFloat(getComputedStyle(el).fontSize),
+        };
+      }),
+    );
+    for (const line of lines) {
+      expect(line.right).toBeLessThanOrEqual(photo.x - 12);
+      expect(line.height).toBeLessThan(line.fontSize * 1.5);
+    }
+    const controls = await page
+      .locator(".hero-actions")
+      .getByRole("button")
+      .boundingBox();
+    expect(controls!.x + controls!.width).toBeLessThanOrEqual(photo.x - 12);
+    await page.evaluate(() => {
+      if(document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      scrollTo(0, 0);
+    });
+    await page
+      .locator(".hero")
+      .screenshot({
+        path: `/workspace/scratch/md-hero-no-overlap-${width}.png`,
+      });
+  });
+}
