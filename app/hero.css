@@ -184,6 +184,7 @@
   object-fit: contain;
   object-position: 50% 45%;
   filter: contrast(1.025) brightness(0.99) saturate(0.95);
+  transform: translateY(var(--hero-offset, 0px));
 }
 .hero-shade {
   position: absolute;

@@ -62,8 +62,8 @@ export default function Hero({ contact }: { contact: () => void }) {
           fill
           priority
           fetchPriority="high"
-          sizes="(max-width:680px) 100vw, (max-width:850px) 440px, 56vw"
-          quality={85}
+          sizes="(max-width:680px) 100vw, (max-width:850px) 440px, (min-width:1875px) 1050px, 56vw"
+          quality={95}
         />
         <div className="hero-shade" aria-hidden="true" />
         <span className="hero-photo-caption">
