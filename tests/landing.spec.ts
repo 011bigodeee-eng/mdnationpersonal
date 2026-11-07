@@ -80,6 +80,15 @@ test("questionário, consentimento, resumo e mensagem de contato", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page
+    .context()
+    .route("https://wa.me/**", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "text/plain",
+        body: "WhatsApp intercepted for validation. No message sent.",
+      }),
+    );
   await page.goto("/");
   const quiz = page.locator("#objetivos");
   await expect(quiz.getByRole("button", { name: "CONTINUAR" })).toBeDisabled();
@@ -97,15 +106,19 @@ test("questionário, consentimento, resumo e mensagem de contato", async ({
     quiz.getByRole("heading", { name: "Vamos conversar, Ana." }),
   ).toBeVisible();
   await expect(quiz.locator("dl")).toContainText("Hipertrofia");
+  const popupPromise = page.waitForEvent("popup");
   await quiz.getByRole("button", { name: "CONVERSAR COM MATHEUS" }).click();
-  const dialog = page.getByRole("dialog");
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("textbox")).toHaveValue(/Meu nome é Ana/);
-  await expect(dialog.getByRole("textbox")).toHaveValue(
-    /Frequência pretendida: 3 dias/,
+  const popup = await popupPromise;
+  await popup.waitForLoadState();
+  const url = new URL(popup.url());
+  expect(url.origin).toBe("https://wa.me");
+  expect(url.pathname).toBe("/5516996455766");
+  expect(url.searchParams.get("text")).toContain("Meu nome é Ana");
+  expect(url.searchParams.get("text")).toContain(
+    "Frequência pretendida: 3 dias",
   );
-  await page.keyboard.press("Escape");
-  await expect(dialog).not.toBeVisible();
+  expect(url.searchParams.get("text")).toContain("Hipertrofia");
+  await popup.close();
   await page.getByRole("button", { name: "Privacidade", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("não possui cadastro");
   await page.keyboard.press("Escape");
@@ -159,4 +172,45 @@ test("acessibilidade automatizada na página e no questionário", async ({
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   expect(report.violations).toEqual([]);
+});
+
+test("CTAs e links públicos usam o WhatsApp comercial informado", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page
+    .context()
+    .route("https://wa.me/**", (route) =>
+      route.fulfill({ status: 200, body: "Validation only. No message sent." }),
+    );
+  await page.goto("/");
+  for (const button of [
+    page.locator(".hero-actions>.button"),
+    page.locator(".service-link").first(),
+    page.locator("#contato .button"),
+  ]) {
+    const waiting = page.waitForEvent("popup");
+    await button.click();
+    const popup = await waiting;
+    await popup.waitForLoadState();
+    const url = new URL(popup.url());
+    expect(url.pathname).toBe("/5516996455766");
+    expect(url.searchParams.get("text")).toContain("Matheus");
+    await popup.close();
+  }
+  await expect(page.locator(".floating-contact")).toHaveAttribute(
+    "href",
+    /^https:\/\/wa.me\/5516996455766\?text=/,
+  );
+  await expect(
+    page
+      .getByRole("navigation", { name: "Navegação do rodapé" })
+      .getByRole("link", { name: "WhatsApp de Matheus Dias" }),
+  ).toHaveAttribute("href", /^https:\/\/wa.me\/5516996455766\?text=/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.getByRole("link", {
+      name: "Vamos conversar com Matheus pelo WhatsApp",
+    }),
+  ).toBeVisible();
 });

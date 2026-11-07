@@ -44,7 +44,7 @@ Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em out
 
 ## Personalizar com dados confirmados
 
-Copie `.env.example` para `.env.local` e informe `NEXT_PUBLIC_WHATSAPP_NUMBER` com país e DDD, somente dígitos, **após validar o contato comercial**. Não é segredo: será incluído no JavaScript público. As variáveis `NEXT_PUBLIC_*` são incorporadas no build; reinicie o desenvolvimento ou refaça o build após alterá-las.
+O contato comercial informado pelo cliente é **+55 (16) 99645-5766** (`5516996455766`), já configurado como padrão em `lib/content.ts`. Não é necessário cadastrar uma variável na Vercel para ativá-lo. Para substituir o contato, copie `.env.example` para `.env.local` e altere `NEXT_PUBLIC_WHATSAPP_NUMBER` com país e DDD, somente dígitos. Uma variável explicitamente vazia desativa o WhatsApp para prévias. Não é segredo: será incluído no JavaScript público. As variáveis `NEXT_PUBLIC_*` são incorporadas no build; reinicie o desenvolvimento ou refaça o build após alterá-las.
 
 Sem telefone válido, os botões abrem um diálogo identificado como prévia, permitem revisar/copiar a mensagem e oferecem o Instagram informado. Nenhum número fictício é utilizado. Com telefone configurado, os mesmos botões abrem o WhatsApp com mensagem codificada. O questionário inclui nome, objetivo, experiência, preferência e frequência apenas após consentimento; não envia respostas para um servidor nem solicita dados de saúde.
 
@@ -66,7 +66,7 @@ O wordmark é tipográfico e provisório; substitua `Wordmark` pelo logotipo ofi
 
 Os dois ZIPs recebidos contêm referências conceituais com rostos, interfaces e textos embutidos. Foram analisados como direção de arte, sem incorporá-los como página ou fotos reais. As imagens conceituais de apoio foram geradas por IA, retratam apenas objetos e estão identificadas como ilustrativas. Não representam um local de atendimento confirmado. As duas fotografias reais mais recentes estão descritas na seção abaixo.
 
-As duas fotografias reais de Matheus foram fornecidas pelo cliente e integradas. Antes de publicação comercial: confirmar WhatsApp, domínio, logo, história/formação/registro profissional, modalidades, funcionamento da avaliação, ferramentas de acompanhamento, depoimentos, resultados e vídeos autorizados. Revisar a política de privacidade conforme as operações reais do responsável. Não há preços, certificações, métricas ou transformações inventadas.
+As duas fotografias reais de Matheus foram fornecidas pelo cliente e integradas. Antes de publicação comercial: confirmar domínio, logo, história/formação/registro profissional, modalidades, funcionamento da avaliação, ferramentas de acompanhamento, depoimentos, resultados e vídeos autorizados. Revisar a política de privacidade conforme as operações reais do responsável. Não há preços, certificações, métricas ou transformações inventadas.
 
 A abertura dura cerca de 1,65 segundo, tem botão de pular, não toca áudio e não se repete na mesma sessão. Animações leves usam CSS, IntersectionObserver e um único ciclo de requestAnimationFrame para o scroll. Parallax e tilt são limitados ao desktop; a linha do método acompanha o progresso, o smartphone muda de perspectiva e o manifesto expande sem prender a rolagem. Não há bibliotecas de animação ou 3D pesadas. O modo de movimento reduzido desativa os efeitos. Os diálogos nativos oferecem Escape e contenção de foco.
 
@@ -95,3 +95,5 @@ A integração e sua validação estão descritas em `docs/PHOTOGRAPHY.md`.
 ## Correção da Hero desktop e mobile
 
 O diagnóstico, a consolidação do CSS e os testes com carregamento atrasado estão em `docs/HERO_CORRECTION.md`. A versão mobile segue identificação, título, subtítulo, CTA, fotografia e continuidade, sem depender de `order` ou altura fixa. A faixa pode ser pausada e fica estática quando há preferência por movimento reduzido.
+
+O contato informado ativa os CTAs, a mensagem personalizada do questionário, o botão flutuante acessível e o link de WhatsApp do rodapé. Os testes interceptam a navegação ao WhatsApp: não enviam mensagens reais.

@@ -730,6 +730,16 @@ function Footer({ privacy }: { privacy: () => void }) {
             <a href="#metodo">Método</a>
             <a href="#objetivos">Seu objetivo</a>
             <a href="#duvidas">Dúvidas</a>
+            {whatsappUrl() && (
+              <a
+                href={whatsappUrl()!}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp de Matheus Dias"
+              >
+                WhatsApp
+              </a>
+            )}
           </nav>
         </div>
         <div className="footer-bottom">
@@ -789,6 +799,7 @@ export default function LandingPage() {
       {whatsappUrl() && (
         <a
           className="floating-contact"
+          aria-label="Vamos conversar com Matheus pelo WhatsApp"
           href={whatsappUrl()!}
           target="_blank"
           rel="noopener noreferrer"

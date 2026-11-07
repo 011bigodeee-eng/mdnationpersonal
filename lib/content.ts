@@ -2,7 +2,8 @@ export const client = {
   brand: "MD Nation",
   name: "Matheus Dias",
   instagram: "https://www.instagram.com/theusdias_treinador/",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "",
+  // Contato comercial informado pelo cliente: +55 (16) 99645-5766.
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5516996455766",
   message:
     "Olá, Matheus! Conheci seu trabalho pelo site da MD Nation e gostaria de saber mais sobre o acompanhamento personalizado.",
   // Fotos reais fornecidas pelo cliente. Originais intactos em assets/originals/matheus.
@@ -82,7 +83,7 @@ export const faqs = [
   ],
   [
     "Como posso começar?",
-    "Preencha o questionário de objetivos e use o contato comercial quando estiver configurado. Você também pode conhecer o perfil @theusdias_treinador no Instagram.",
+    "Preencha o questionário de objetivos e converse com Matheus pelo WhatsApp. Você também pode conhecer o perfil @theusdias_treinador no Instagram.",
   ],
   [
     "Preciso ter experiência para começar?",
