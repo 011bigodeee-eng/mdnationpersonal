@@ -5,18 +5,25 @@ import { ArrowUpRight, Instagram, Play, Plus } from "lucide-react";
 import { media, client, videos } from "@/lib/content";
 import { Eyebrow, SectionTitle } from "./Primitives";
 import Modal from "./Modal";
+
 export default function Gallery({
   openVideo,
 }: {
   openVideo: (src: string) => void;
 }) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<
+    (typeof media.gallery)[number] | null
+  >(null);
   return (
-    <section id="galeria" className="section gallery" data-scroll-scene>
+    <section
+      id="galeria"
+      className="section gallery gallery--personal"
+      data-scroll-scene
+    >
       <div className="container">
         <div className="section-heading">
           <div>
-            <Eyebrow>O UNIVERSO MD NATION</Eyebrow>
+            <Eyebrow>MATHEUS DIAS / DENTRO E FORA DA ACADEMIA</Eyebrow>
             <SectionTitle>
               TREINO.
               <br />
@@ -26,33 +33,38 @@ export default function Gallery({
             </SectionTitle>
           </div>
           <div className="heading-aside">
-            <span className="gallery-edition">VOLUME 01 / THE DETAILS</span>
+            <span className="gallery-edition">VOLUME 02 / PRESENÇA REAL</span>
             <p>
-              A força mora nos detalhes.
-              <br />A evolução, no que se repete.
+              A mesma disciplina.
+              <br />
+              Diferentes formas de viver o movimento.
             </p>
             <span className="tiny-label">
-              EDITORIAL CONCEITUAL · IMAGENS GERADAS POR IA
+              FOTOGRAFIAS REAIS DE MATHEUS DIAS
             </span>
           </div>
         </div>
         <div className="gallery-grid">
-          {media.gallery.map(({ src, title, caption }, i) => (
+          {media.gallery.map((item, i) => (
             <button
-              key={src}
-              className={`gallery-item gallery-item-${i + 1} reveal`}
-              onClick={() => setSelected(src)}
-              title={`Ampliar imagem ilustrativa: ${title}`}
+              key={item.src}
+              className={`gallery-item gallery-item-${i + 1} gallery-item--${item.kind} reveal`}
+              onClick={() => setSelected(item)}
+              title={`Ampliar fotografia: ${item.title}`}
             >
               <Image
-                src={src}
-                alt={caption}
+                src={item.src}
+                alt={item.caption}
                 fill
+                quality={item.kind === "real" ? 85 : 75}
                 sizes="(max-width:680px) 90vw, (max-width:1024px) 50vw, 55vw"
               />
-              <span>
-                <small>0{i + 1} / MD NATION</small>
-                {title}
+              <span className="gallery-photo-kind">
+                {item.kind === "real" ? "FOTOGRAFIA REAL" : "CONCEITO · IA"}
+              </span>
+              <span className="gallery-photo-caption">
+                <small>{item.context}</small>
+                {item.title}
               </span>
               <span className="gallery-expand">
                 <Plus size={18} />
@@ -73,7 +85,8 @@ export default function Gallery({
         </div>
         <div className="gallery-footer">
           <span>
-            CENÁRIOS ILUSTRATIVOS. O CONTEÚDO REAL ESTÁ NO PERFIL DO MATHEUS.
+            MATHEUS NA ACADEMIA E NO JIU-JÍTSU. O CENÁRIO DE EQUIPAMENTOS É
+            ILUSTRATIVO.
           </span>
           <a
             className="text-link"
@@ -81,24 +94,33 @@ export default function Gallery({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Instagram size={17} /> @THEUSDIAS_TREINADOR{" "}
-            <ArrowUpRight size={18} />
+            <Instagram size={17} />
+            @THEUSDIAS_TREINADOR <ArrowUpRight size={18} />
           </a>
         </div>
       </div>
       {selected && (
-        <Modal title="Galeria ilustrativa" onClose={() => setSelected(null)}>
+        <Modal
+          title={
+            selected.kind === "real"
+              ? "Matheus Dias — fotografias"
+              : "Galeria ilustrativa"
+          }
+          onClose={() => setSelected(null)}
+        >
           <div className="lightbox-image">
             <Image
-              src={selected}
-              alt="Fotografia conceitual de equipamentos de treinamento, gerada por IA."
+              src={selected.src}
+              alt={selected.caption}
               fill
+              quality={85}
               sizes="90vw"
             />
           </div>
           <p className="modal-caption">
-            Composição editorial gerada por IA. Não representa o local de
-            atendimento.
+            {selected.kind === "real"
+              ? selected.caption
+              : "Composição editorial gerada por IA. Não representa o local de atendimento."}
           </p>
         </Modal>
       )}

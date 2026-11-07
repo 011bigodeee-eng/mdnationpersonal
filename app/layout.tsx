@@ -62,10 +62,10 @@ export const metadata: Metadata = {
       ? {
           images: [
             {
-              url: "/images/gym.webp",
-              width: 1536,
-              height: 1024,
-              alt: "Equipamentos em uma academia com iluminação vermelha. Imagem ilustrativa.",
+              url: "/images/matheus/matheus-hero.webp",
+              width: 869,
+              height: 867,
+              alt: "Matheus Dias na academia, personal trainer da MD Nation.",
             },
           ],
         }

@@ -116,7 +116,7 @@ test("movimento real progride sem bloquear a rolagem; modo reduzido continua leg
   await expect(page.locator("h1")).toHaveCSS("opacity", "1");
 });
 
-test("editorial sem placeholders vazios e sem repetição de fotos entre seções", async ({
+test("editorial sem placeholders vazios e com repetição limitada às fotos reais", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -132,7 +132,12 @@ test("editorial sem placeholders vazios e sem repetição de fotos entre seçõe
         )
         .filter(Boolean),
     );
-  expect(new Set(sources).size).toBe(sources.length);
+  const counts = new Map<string, number>();
+  for (const source of sources)
+    counts.set(source!, (counts.get(source!) ?? 0) + 1);
+  for (const [source, count] of counts)
+    expect(count).toBe(source.startsWith("/images/matheus/") ? 2 : 1);
+  await expect(page.locator(".gallery-item--real")).toHaveCount(2);
   await expect(page.locator(".cinematic-film h2")).toContainText(
     "NÃO ACONTECE",
   );

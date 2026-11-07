@@ -5,8 +5,9 @@ export const client = {
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "",
   message:
     "Olá, Matheus! Conheci seu trabalho pelo site da MD Nation e gostaria de saber mais sobre o acompanhamento personalizado.",
-  // Substitua somente por fotos reais e autorizadas. null mantém a composição de equipamentos.
-  trainerPhoto: null as string | null,
+  // Fotos reais fornecidas pelo cliente. Originais intactos em assets/originals/matheus.
+  trainerPhoto: "/images/matheus/matheus-hero.webp" as string | null,
+  trainerAboutPhoto: "/images/matheus/matheus-sobre.webp" as string | null,
   trainerBio: null as string | null,
   professionalRegistration: null as string | null,
 };
@@ -111,20 +112,28 @@ export const media = {
   featuredVideo: null as { src: string; captions?: string } | null,
   gallery: [
     {
-      src: "/images/gallery-chalk.webp",
-      title: "A PREPARAÇÃO",
+      src: "/images/matheus/matheus-hero.webp",
+      title: "PRESENÇA. FOCO. DIREÇÃO.",
       caption:
-        "Bacia de magnésio em um cenário de treinamento. Imagem conceitual.",
+        "Matheus Dias na academia, de braços cruzados, usando a camiseta original Musculação Faixa Preta.",
+      kind: "real" as const,
+      context: "MATHEUS DIAS / NA ACADEMIA",
     },
     {
-      src: "/images/gallery-pulley.webp",
-      title: "A PRECISÃO",
-      caption: "Detalhe de polia e cabo de equipamento. Imagem conceitual.",
+      src: "/images/matheus/matheus-sobre.webp",
+      title: "DISCIPLINA EM MOVIMENTO.",
+      caption:
+        "Matheus Dias de quimono branco durante a prática de jiu-jítsu, no ambiente original da fotografia.",
+      kind: "real" as const,
+      context: "MATHEUS DIAS / VIVÊNCIA ESPORTIVA",
     },
     {
       src: "/images/gym.webp",
       title: "O AMBIENTE",
-      caption: "Composição de academia e anilhas. Imagem conceitual.",
+      caption:
+        "Composição de academia e anilhas. Imagem conceitual gerada por IA.",
+      kind: "concept" as const,
+      context: "ATMOSFERA / IMAGEM CONCEITUAL · IA",
     },
   ],
 };

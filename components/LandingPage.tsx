@@ -223,7 +223,11 @@ function Navbar({ contact }: { contact: () => void }) {
 }
 function Hero({ contact }: { contact: () => void }) {
   return (
-    <section className="hero" id="inicio" data-scroll-scene>
+    <section
+      className={`hero ${client.trainerPhoto ? "hero--real" : ""}`}
+      id="inicio"
+      data-scroll-scene
+    >
       <div className="hero-atmosphere" />
       <div className="hero-visual">
         <Image
@@ -237,12 +241,13 @@ function Hero({ contact }: { contact: () => void }) {
           fill
           priority
           fetchPriority="high"
-          sizes="(max-width: 850px) 100vw, 66vw"
+          sizes="(max-width: 680px) 100vw, 55vw"
+          quality={85}
         />
         <div className="hero-shade" />
         <span className="hero-photo-caption">
           {client.trainerPhoto
-            ? "MATHEUS DIAS / MD NATION"
+            ? "MATHEUS DIAS / FOTOGRAFIA REAL"
             : "ESTUDO DE ATMOSFERA / IMAGEM CONCEITUAL · IA"}
         </span>
         <div className="hero-visual-index">
@@ -316,13 +321,12 @@ function AboutTrainer() {
               MATHEUS <em>DIAS.</em>
             </SectionTitle>
             <p className="lead">
-              Treinar é uma parte.
-              <br />
-              Ter direção faz a diferença.
+              A disciplina tem muitas formas.
+              <br />A sua jornada é única.
             </p>
             <p>
               {client.trainerBio ??
-                "Mais do que treinar, evoluir exige estratégia, disciplina e acompanhamento. A MD Nation é o ponto de encontro entre seus objetivos e uma jornada de treinamento com intenção."}
+                "Personal trainer e coach, Matheus Dias é o profissional por trás da MD Nation. Entre a academia e a vivência esportiva, sua presença dá rosto a uma jornada de treinamento com estratégia, disciplina e atenção ao processo."}
             </p>
             <div className="principles">
               {[
@@ -366,40 +370,44 @@ function AboutTrainer() {
               CONHEÇA O MATHEUS NO INSTAGRAM <ArrowUpRight size={18} />
             </a>
           </div>
-          <div className="about-composition reveal" data-tilt>
+          <div
+            className={`about-composition reveal ${client.trainerAboutPhoto ? "about-composition--real" : ""}`}
+            data-tilt
+          >
             <div className="about-art">
               <Image
-                src={client.trainerPhoto ?? media.about}
+                src={client.trainerAboutPhoto ?? media.about}
                 alt={
-                  client.trainerPhoto
-                    ? "Matheus Dias"
+                  client.trainerAboutPhoto
+                    ? "Matheus Dias de quimono branco durante a prática de jiu-jítsu. Fotografia real fornecida pelo cliente."
                     : "Texturas de cordas em um ambiente de treinamento. Imagem conceitual."
                 }
                 fill
-                sizes="(max-width:850px) 100vw, 45vw"
+                sizes="(max-width:680px) 100vw, 45vw"
+                quality={85}
               />
               <span className="art-cross">+</span>
               <span className="about-vertical">
-                A FORÇA ESTÁ NA CONSTÂNCIA.
+                VIVÊNCIA ESPORTIVA / JIU-JÍTSU.
               </span>
             </div>
             <div className="about-statement">
               <span>MD / MINDSET</span>
               <p>
-                MAIS INTENÇÃO.
+                DISCIPLINA QUE
                 <br />
-                <em>EM CADA REPETIÇÃO.</em>
+                <em>ACOMPANHA O MOVIMENTO.</em>
               </p>
               <small>
-                {client.trainerPhoto
-                  ? "MATHEUS DIAS · PERSONAL TRAINER"
+                {client.trainerAboutPhoto
+                  ? "MATHEUS DIAS · FOTOGRAFIA REAL"
                   : "IMAGEM CONCEITUAL · IA"}
               </small>
             </div>
             <span className="about-caption">
               {client.trainerBio
                 ? "UMA JORNADA COM DIREÇÃO."
-                : "PERFIL PROFISSIONAL EM VALIDAÇÃO · PRÉVIA EDITORIAL"}
+                : "FORMAÇÃO E REGISTRO PROFISSIONAL A CONFIRMAR"}
             </span>
           </div>
         </div>
@@ -786,7 +794,7 @@ function Footer({ privacy }: { privacy: () => void }) {
           <a href="#inicio" title="MD Nation — voltar ao início">
             <Wordmark />
           </a>
-          <p>ESTRATÉGIA. DISCIPLINA. EVOLUÇÃO.</p>
+          <p>MATHEUS DIAS. ESTRATÉGIA. DISCIPLINA. EVOLUÇÃO.</p>
           <a
             className="instagram-button"
             href={client.instagram}

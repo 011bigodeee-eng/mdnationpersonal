@@ -69,7 +69,7 @@ for (const width of [
       window.scrollTo(0, 0);
     });
     await page.screenshot({
-      path: `/workspace/scratch/md-after-${width}.png`,
+      path: `/workspace/scratch/md-photos-${width}.png`,
       fullPage: true,
     });
     expect(errors).toEqual([]);

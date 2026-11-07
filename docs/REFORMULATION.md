@@ -45,3 +45,7 @@ A prévia preserva `noindex` enquanto o domínio de produção não estiver conf
 - O score de SEO é afetado pelo noindex intencional da prévia. Não houve desativação de verificações para aumentar pontuações.
 - Pendências comerciais: fotos e vídeos reais autorizados, WhatsApp, logo oficial, biografia e registro profissional, confirmação dos serviços e eventual material de resultados/depoimentos.
 - A implantação remota não pôde ser verificada por causa da política de rede do ambiente.
+
+## Atualização posterior: fotografias reais
+
+As duas fotografias reais de Matheus foram recebidas e integradas depois desta reformulação. A pendência de fotos foi resolvida para Hero, Sobre e galeria. Consulte [a integração fotográfica](PHOTOGRAPHY.md) para preservação dos originais, configuração e validação atualizadas.

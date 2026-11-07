@@ -37,7 +37,7 @@ Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em out
 - `components/Primitives.tsx`, `Modal.tsx`, `hooks/useCinematicMotion.ts`: elementos compartilhados, diálogos e movimento progressivo.
 - `lib/accessibility.ts`: ciclo de foco por teclado nos diálogos.
 - `lib/content.ts`: configuração central de cliente, links, serviços, método, perguntas, resultados, depoimentos e vídeos.
-- `public/images/`: onze imagens WebP de ambientes e equipamentos, com recurso exclusivo por seção.
+- `public/images/`: fotografias reais em `matheus/` e imagens conceituais de apoio.
 - `tests/landing.spec.ts` e `tests/reform.spec.ts`: testes funcionais, acessibilidade, menu, teclado, persistência entre etapas e responsividade.
 
 ## Personalizar com dados confirmados
@@ -50,7 +50,7 @@ Defina `NEXT_PUBLIC_SITE_URL` com a URL HTTPS definitiva para habilitar URL can�
 
 Edite `lib/content.ts`:
 
-- `client.trainerPhoto`: caminho de foto real autorizada em `public/images/`. Enquanto `null`, permanece uma imagem de equipamentos, sem representar Matheus por um rosto de IA.
+- `client.trainerPhoto`: foto da academia na Hero (`/images/matheus/matheus-hero.webp`). `client.trainerAboutPhoto`: foto de jiu-jítsu no Sobre (`/images/matheus/matheus-sobre.webp`). Cada campo é independente; `null` preserva o fallback de equipamentos da respectiva seção.
 - `client.trainerBio` e `client.professionalRegistration`: texto e registro efetivamente confirmados. Nenhum registro extraído da referência é publicado.
 - `services`: confirme as modalidades, descrições e disponibilidade; remova as não oferecidas. Retire os rótulos demonstrativos dos componentes somente após essa validação.
 - `results`: adicione `{name, before, after, description}` apenas com autorização. Ativa um comparador de imagens com controle nativo por mouse, toque e teclado.
@@ -62,9 +62,9 @@ O wordmark é tipográfico e provisório; substitua `Wordmark` pelo logotipo ofi
 
 ## Materiais e pendências
 
-Os dois ZIPs recebidos contêm referências conceituais com rostos, interfaces e textos embutidos. Foram analisados como direção de arte, sem incorporá-los como página ou fotos reais. As imagens WebP desta implementação foram geradas por IA, retratam apenas objetos e estão identificadas como ilustrativas. Não representam um local de atendimento confirmado.
+Os dois ZIPs recebidos contêm referências conceituais com rostos, interfaces e textos embutidos. Foram analisados como direção de arte, sem incorporá-los como página ou fotos reais. As imagens conceituais de apoio foram geradas por IA, retratam apenas objetos e estão identificadas como ilustrativas. Não representam um local de atendimento confirmado. As duas fotografias reais mais recentes estão descritas na seção abaixo.
 
-Antes de publicação comercial: confirmar WhatsApp, domínio, logo, fotos reais, história/formação/registro profissional, modalidades, funcionamento da avaliação, ferramentas de acompanhamento, depoimentos, resultados e vídeos autorizados. Revisar a política de privacidade conforme as operações reais do responsável. Não há preços, certificações, métricas ou transformações inventadas.
+As duas fotografias reais de Matheus foram fornecidas pelo cliente e integradas. Antes de publicação comercial: confirmar WhatsApp, domínio, logo, história/formação/registro profissional, modalidades, funcionamento da avaliação, ferramentas de acompanhamento, depoimentos, resultados e vídeos autorizados. Revisar a política de privacidade conforme as operações reais do responsável. Não há preços, certificações, métricas ou transformações inventadas.
 
 A abertura dura cerca de 1,65 segundo, tem botão de pular, não toca áudio e não se repete na mesma sessão. Animações leves usam CSS, IntersectionObserver e um único ciclo de requestAnimationFrame para o scroll. Parallax e tilt são limitados ao desktop; a linha do método acompanha o progresso, o smartphone muda de perspectiva e o manifesto expande sem prender a rolagem. Não há bibliotecas de animação ou 3D pesadas. O modo de movimento reduzido desativa os efeitos. Os diálogos nativos oferecem Escape e contenção de foco.
 
@@ -79,3 +79,13 @@ Configure as imagens e a galeria em `media`, dentro de `lib/content.ts`. Para o 
 O menu mobile é um diálogo com bloqueio de scroll, Escape, retorno de foco ao botão e fechamento ao navegar ou ampliar para desktop. Todos os diálogos mantêm o foco no teclado. O questionário preserva escolhas e nome ao voltar; o resumo não compartilha dados sem ação explícita.
 
 A auditoria e a comparação local estão documentadas em `docs/REFORMULATION.md`.
+
+## Fotografias reais de Matheus Dias
+
+A Hero utiliza a foto de braços cruzados na academia; Sobre utiliza a foto de quimono branco durante o jiu-jítsu. A galeria destaca as duas fotos, uma única vez cada, acompanhadas por um cenário conceitual secundário. Fotos reais e imagens de IA são identificadas separadamente nos textos e na ampliação.
+
+Os PNGs enviados estão intactos em `assets/originals/matheus/`. O manifesto registra as dimensões e os hashes SHA-256. Os WebP de origem em `public/images/matheus/` foram codificados sem perdas, conservando exatamente os pixels dos PNGs, sem corte, retoque generativo, super-resolução ou ampliação. Não houve alteração de rosto, corpo, inscrição da camiseta ou ambiente. Next Image entrega versões responsivas comprimidas com qualidade 85; os originais arquivados não são carregados pela página.
+
+O tratamento visual usa somente contraste, luminosidade e saturação moderados por CSS, mais gradientes sobrepostos. O desktop mantém a fotografia íntegra em uma área própria à direita. No mobile, a área fotográfica quadrada vem após o texto e os botões, evitando sobreposição com o rosto. A foto de jiu-jítsu mantém a proporção e o contexto, sem atribuir títulos, graduação ou conquistas.
+
+A integração e sua validação estão descritas em `docs/PHOTOGRAPHY.md`.
