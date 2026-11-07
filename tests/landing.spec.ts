@@ -133,7 +133,7 @@ test("abertura termina automaticamente, galeria e mockup respondem", async ({
   await expect(page.getByRole("button", { name: "Pular introdução" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Abertura MD Nation" })).not.toBeVisible({ timeout: 3500 });
   await expect(intro).not.toBeVisible();
-  await page.getByTitle("Ver dia 3 da semana demonstrativa").click();
+  await page.getByTitle("Ver dia 3 da semana").click();
   await expect(page.locator(".phone-workout h4")).toHaveText("Foco & técnica");
   await page.getByRole("button", { name: /O AMBIENTE/ }).click();
   await expect(

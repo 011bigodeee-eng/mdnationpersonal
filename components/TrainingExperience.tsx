@@ -14,7 +14,7 @@ export default function TrainingExperience() {
             <div className="phone-camera" />
             <div className="phone-top">
               <Wordmark />
-              <span>PRÉVIA</span>
+              <span className="phone-profile" aria-hidden="true">MD</span>
             </div>
             <p className="tiny-label">UM PASSO DE CADA VEZ</p>
             <h3>
@@ -22,13 +22,14 @@ export default function TrainingExperience() {
               <br />
               <em>movimento.</em>
             </h3>
+            <div className="phone-week-heading"><span>SUA SEMANA</span><span>12 — 18</span></div>
             <div className="phone-days">
               {["S", "T", "Q", "Q", "S", "S", "D"].map((d, i) => (
                 <button
                   key={i}
                   className={day === i ? "selected" : ""}
                   onClick={() => setDay(i)}
-                  title={`Ver dia ${i + 1} da semana demonstrativa`}
+                  title={`Ver dia ${i + 1} da semana`}
                   aria-pressed={day === i}
                 >
                   {d}
@@ -37,7 +38,7 @@ export default function TrainingExperience() {
               ))}
             </div>
             <div className="phone-workout">
-              <span>PLANEJAMENTO CONCEITUAL</span>
+              <span>SEU FOCO DO DIA</span>
               <h4>
                 {
                   [
@@ -69,11 +70,8 @@ export default function TrainingExperience() {
               </div>
               <ArrowUpRight size={16} />
             </div>
-            <span className="phone-disclaimer">INTERFACE DEMONSTRATIVA</span>
+            <div className="phone-home-indicator" aria-hidden="true" />
           </div>
-          <span className="scene-note">
-            CONCEITO DE ORGANIZAÇÃO · NÃO REPRESENTA UM APP PRÓPRIO
-          </span>
         </div>
         <div className="reveal">
           <Eyebrow>ROTINA COM MAIS CLAREZA</Eyebrow>
@@ -89,7 +87,7 @@ export default function TrainingExperience() {
           </p>
           <p>
             Treinos, planejamento e evolução reunidos em uma experiência
-            simples. Explore o conceito ao lado.
+            simples, para manter o foco no próximo passo.
           </p>
           <ul className="check-list">
             <li>
@@ -106,8 +104,8 @@ export default function TrainingExperience() {
             </li>
           </ul>
           <p className="preview-note">
-            Interface conceitual de organização. Ferramentas e canais de
-            acompanhamento serão confirmados na conversa com o treinador.
+            Converse com Matheus para conhecer as ferramentas e os canais de
+            acompanhamento disponíveis para sua rotina.
           </p>
         </div>
       </div>

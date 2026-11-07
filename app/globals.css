@@ -1035,24 +1035,6 @@ section {
 .phone-stat > svg:last-child {
   margin-left: auto;
 }
-.phone-disclaimer {
-  display: block;
-  font-size: 6px;
-  letter-spacing: 1.3px;
-  text-align: center;
-  color: #aaaeba;
-  margin-top: 27px;
-}
-.scene-note {
-  position: absolute;
-  bottom: 5px;
-  left: 15px;
-  right: 15px;
-  text-align: center;
-  font-size: 7px;
-  letter-spacing: 0.8px;
-  color: #a6a7ad;
-}
 .check-list {
   padding: 0;
   list-style: none;
@@ -2544,10 +2526,6 @@ html[data-md-intro="skip"] .intro {
     font-size: 9px;
     gap: 9px;
   }
-  .scene-note {
-    font-size: 6px;
-    letter-spacing: 0.5px;
-  }
   .check-list li {
     font-size: 11px;
     gap: 9px;
@@ -3188,13 +3166,6 @@ html[data-md-intro="skip"] .intro {
   .phone-stat small {
     font-size: 8px;
   }
-  .scene-note {
-    font-size: 6px;
-    letter-spacing: 0.3px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
   .orbit-one {
     width: 350px;
     height: 350px;
@@ -3758,10 +3729,6 @@ html[data-md-intro="skip"] .intro {
   }
   .phone-scene {
     min-height: 635px;
-  }
-  .scene-note {
-    font-size: 5px;
-    letter-spacing: 0.1px;
   }
   .quiz-panel {
     padding: 25px 18px;
