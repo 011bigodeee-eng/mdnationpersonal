@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-for (const width of [320, 375, 390, 430, 768, 1024, 1440]) {
+for (const width of [
+  320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440, 1920,
+]) {
   test(`layout funcional sem overflow em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -38,14 +40,17 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1440]) {
           ),
         ),
     ).toBe(true);
-    if (width < 681) {
+    if (width < 851) {
       await page.getByRole("button", { name: "Abrir menu" }).click();
       await expect(
-        page.getByRole("button", { name: "Fechar menu" }),
-      ).toHaveAttribute("aria-expanded", "true");
+        page.getByRole("dialog", { name: "Menu de navegação" }),
+      ).toBeVisible();
+      expect(await page.evaluate(() => document.body.style.overflow)).toBe(
+        "hidden",
+      );
       await page
         .locator("#main-nav")
-        .getByRole("link", { name: "Método", exact: true })
+        .getByRole("link", { name: /Método/ })
         .click();
       await expect(
         page.getByRole("button", { name: "Abrir menu" }),
@@ -59,8 +64,12 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1440]) {
       "open",
       "",
     );
+    await page.evaluate(() => {
+      (document.activeElement as HTMLElement)?.blur();
+      window.scrollTo(0, 0);
+    });
     await page.screenshot({
-      path: `/workspace/scratch/md-${width}.png`,
+      path: `/workspace/scratch/md-after-${width}.png`,
       fullPage: true,
     });
     expect(errors).toEqual([]);
@@ -110,13 +119,9 @@ test("abertura pode ser pulada, galeria e mockup respondem", async ({
   await expect(intro).toBeVisible();
   await page.getByRole("button", { name: "Pular introdução" }).click();
   await expect(intro).not.toBeVisible();
-  await page
-    .getByTitle("Ver dia 3 da semana demonstrativa")
-    .click();
+  await page.getByTitle("Ver dia 3 da semana demonstrativa").click();
   await expect(page.locator(".phone-workout h4")).toHaveText("Foco & técnica");
-  await page
-    .getByRole("button", { name: /O AMBIENTE/ })
-    .click();
+  await page.getByRole("button", { name: /O AMBIENTE/ }).click();
   await expect(
     page.getByRole("dialog", { name: "Galeria ilustrativa" }),
   ).toBeVisible();

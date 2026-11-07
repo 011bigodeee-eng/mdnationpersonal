@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { trapDialogFocus } from "@/lib/accessibility";
+import { useEffect, useRef, useState } from "react";
 import {
+  MessageCircle,
   ArrowUpRight,
   ArrowRight,
   ArrowDown,
@@ -12,26 +14,32 @@ import {
   Monitor,
   ClipboardList,
   Target,
-  Activity,
   TrendingUp,
   Check,
-  ChevronDown,
   Instagram,
   Play,
   Plus,
-  LockKeyhole,
   ScanLine,
 } from "lucide-react";
 import {
   client,
+  media,
   whatsappUrl,
   services,
   method,
   faqs,
   results,
   testimonials,
-  videos,
 } from "@/lib/content";
+
+import CinematicFilm from "./CinematicFilm";
+import dynamic from "next/dynamic";
+import { Wordmark, Eyebrow, SectionTitle, ContactButton } from "./Primitives";
+import Modal from "./Modal";
+const GoalsQuiz = dynamic(() => import("./GoalsQuiz"));
+const Gallery = dynamic(() => import("./Gallery"));
+const TrainingExperience = dynamic(() => import("./TrainingExperience"));
+import { useCinematicMotion } from "./hooks/useCinematicMotion";
 
 const nav = [
   ["Sobre", "sobre"],
@@ -39,30 +47,6 @@ const nav = [
   ["Método", "metodo"],
   ["Resultados", "resultados"],
 ];
-function Wordmark() {
-  return (
-    <span className="wordmark">
-      <span className="monogram">
-        M<span>D</span>
-      </span>
-      <span className="wordmark-text">
-        NATION<small>MATHEUS DIAS</small>
-      </span>
-    </span>
-  );
-}
-function Eyebrow({ children }: { children: ReactNode }) {
-  return (
-    <div className="eyebrow">
-      <span />
-      {children}
-    </div>
-  );
-}
-function SectionTitle({ children }: { children: ReactNode }) {
-  return <h2 className="display">{children}</h2>;
-}
-
 function CinematicIntro() {
   const [visible, setVisible] = useState(true);
   const ref = useRef<HTMLDialogElement>(null);
@@ -78,15 +62,21 @@ function CinematicIntro() {
       ref.current?.removeAttribute("open");
       ref.current?.showModal();
     }
+    // The opening begins with the initial HTML, not after React hydration.
+    const started = Number(
+      document.documentElement.dataset.mdIntroStarted ?? performance.now(),
+    );
+    const remaining = Math.max(0, 1650 - (performance.now() - started));
     const t = setTimeout(
       () => {
         try {
           sessionStorage.setItem("md-intro", "1");
         } catch {}
         ref.current?.close();
+        document.documentElement.dataset.mdIntro = "skip";
         setVisible(false);
       },
-      seen || reduced ? 0 : 2100,
+      seen || reduced ? 0 : remaining,
     );
     return () => clearTimeout(t);
   }, []);
@@ -95,6 +85,7 @@ function CinematicIntro() {
       sessionStorage.setItem("md-intro", "1");
     } catch {}
     ref.current?.close();
+    document.documentElement.dataset.mdIntro = "skip";
     setVisible(false);
   }
   return visible ? (
@@ -103,11 +94,14 @@ function CinematicIntro() {
       open
       className="intro"
       aria-label="Abertura MD Nation"
+      onKeyDown={(e) => trapDialogFocus(e, e.currentTarget)}
       onCancel={dismiss}
     >
       <div className="intro-glow" />
+      <div className="intro-line" />
+      <span className="intro-edition">MD NATION / BRAND EXPERIENCE</span>
       <Wordmark />
-      <p>DISCIPLINA CONSTRÓI EVOLUÇÃO.</p>
+      <p>BUILT BY DISCIPLINE.</p>
       <button onClick={dismiss}>
         Pular introdução <ArrowRight size={15} />
       </button>
@@ -117,17 +111,37 @@ function CinematicIntro() {
 function Navbar({ contact }: { contact: () => void }) {
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (!open) return;
-    function escape(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setOpen(false);
-        toggle.current?.focus();
-      }
-    }
-    document.addEventListener("keydown", escape);
-    return () => document.removeEventListener("keydown", escape);
+    const d = dialog.current;
+    const opener = toggle.current;
+    const previous = document.body.style.overflow;
+    d?.showModal();
+    document.body.style.overflow = "hidden";
+    const desktop = window.matchMedia("(min-width: 851px)");
+    const resize = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    desktop.addEventListener("change", resize);
+    return () => {
+      d?.close();
+      document.body.style.overflow = previous;
+      desktop.removeEventListener("change", resize);
+      opener?.focus();
+    };
   }, [open]);
+  const links = (
+    <>
+      {nav.map(([label, id], i) => (
+        <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>
+          <span className="nav-number">0{i + 1}</span>
+          {label}
+          <ArrowUpRight size={19} />
+        </a>
+      ))}
+    </>
+  );
   return (
     <header className="header">
       <div className="nav-shell">
@@ -135,217 +149,259 @@ function Navbar({ contact }: { contact: () => void }) {
           href="#inicio"
           className="brand-link"
           title="MD Nation — voltar ao início"
-          onClick={() => setOpen(false)}
         >
           <Wordmark />
         </a>
-        <nav
-          aria-label="Navegação principal"
-          id="main-nav"
-          className={open ? "navigation open" : "navigation"}
-        >
-          {nav.map(([label, id]) => (
-            <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>
-              {label}
-            </a>
-          ))}
-          <button
-            className="nav-contact"
-            onClick={() => {
-              setOpen(false);
-              contact();
-            }}
-          >
+        <nav className="navigation" aria-label="Navegação principal">
+          {links}
+          <button className="nav-contact" onClick={contact}>
             Vamos conversar <ArrowUpRight size={16} />
           </button>
         </nav>
         <button
           ref={toggle}
           className="menu-toggle"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-label="Abrir menu"
           aria-expanded={open}
           aria-controls="main-nav"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(true)}
         >
-          {open ? <X /> : <Menu />}
+          <span>MENU</span>
+          <Menu size={22} />
         </button>
       </div>
+      <dialog
+        ref={dialog}
+        className="mobile-menu"
+        aria-label="Menu de navegação"
+        onKeyDown={(e) => trapDialogFocus(e, e.currentTarget)}
+        onCancel={(e) => {
+          e.preventDefault();
+          setOpen(false);
+        }}
+      >
+        <div className="mobile-menu-top">
+          <Wordmark />
+          <button
+            aria-label="Fechar menu"
+            aria-expanded={open}
+            onClick={() => setOpen(false)}
+          >
+            <X size={25} />
+          </button>
+        </div>
+        <span className="tiny-label">SEU PRÓXIMO MOVIMENTO</span>
+        <nav id="main-nav" aria-label="Navegação mobile">
+          {links}
+          <a href="#objetivos" onClick={() => setOpen(false)}>
+            <span className="nav-number">05</span>Seu objetivo
+            <ArrowUpRight size={19} />
+          </a>
+        </nav>
+        <button
+          className="button"
+          onClick={() => {
+            setOpen(false);
+            contact();
+          }}
+        >
+          QUERO COMEÇAR AGORA <ArrowUpRight size={19} />
+        </button>
+        <a
+          className="mobile-social"
+          href={client.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Instagram size={17} />
+          @theusdias_treinador
+        </a>
+        <p>BUILT BY DISCIPLINE.</p>
+      </dialog>
     </header>
   );
 }
-function ContactButton({
-  children,
-  onClick,
-  secondary = false,
-}: {
-  children: ReactNode;
-  onClick: () => void;
-  secondary?: boolean;
-}) {
-  return (
-    <button
-      className={`button ${secondary ? "button-secondary" : ""}`}
-      onClick={onClick}
-    >
-      {children}
-      <ArrowUpRight size={19} />
-    </button>
-  );
-}
 function Hero({ contact }: { contact: () => void }) {
-  const hero = useRef<HTMLElement>(null);
-  useEffect(() => {
-    if (
-      !window.matchMedia(
-        "(min-width: 851px) and (prefers-reduced-motion: no-preference)",
-      ).matches
-    )
-      return;
-    let frame = 0;
-    const update = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        hero.current?.style.setProperty(
-          "--hero-offset",
-          `${Math.min(window.scrollY, 850) * 0.065}px`,
-        );
-        frame = 0;
-      });
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", update);
-      cancelAnimationFrame(frame);
-    };
-  }, []);
-
   return (
-    <section ref={hero} className="hero" id="inicio">
-      <Image
-        className="hero-image"
-        src="/images/gym.webp"
-        alt="Barra e anilhas em academia escura com iluminação vermelha. Imagem ilustrativa gerada por IA."
-        fill
-        priority
-        sizes="100vw"
-      />
-      <div className="hero-shade" />
-      <div className="hero-grid" />
+    <section className="hero" id="inicio" data-scroll-scene>
+      <div className="hero-atmosphere" />
+      <div className="hero-visual">
+        <Image
+          className="hero-image"
+          src={client.trainerPhoto ?? media.hero}
+          alt={
+            client.trainerPhoto
+              ? "Matheus Dias, personal trainer"
+              : "Academia com rack, banco e iluminação dramática. Imagem conceitual gerada por IA."
+          }
+          fill
+          priority
+          fetchPriority="high"
+          sizes="(max-width: 850px) 100vw, 66vw"
+        />
+        <div className="hero-shade" />
+        <span className="hero-photo-caption">
+          {client.trainerPhoto
+            ? "MATHEUS DIAS / MD NATION"
+            : "ESTUDO DE ATMOSFERA / IMAGEM CONCEITUAL · IA"}
+        </span>
+        <div className="hero-visual-index">
+          <span>MD</span>
+          <small>
+            FOCO NO PROCESSO.
+            <br />
+            FORÇA NA CONSTÂNCIA.
+          </small>
+        </div>
+      </div>
       <div className="container hero-content">
         <div className="hero-kicker">
           <span className="live-dot" /> MATHEUS DIAS{" "}
           <span className="kicker-divider" /> PERSONAL TRAINER & COACH
         </div>
-        <h1>
-          SUA EVOLUÇÃO
-          <br />
-          COMEÇA COM
-          <br />
-          <em>UMA DECISÃO.</em>
-        </h1>
+        <div className="hero-title-wrap">
+          <span className="hero-edition">01 — A DECISÃO</span>
+          <h1>
+            <span>SUA EVOLUÇÃO</span>
+            <span>COMEÇA COM</span>
+            <em>UMA DECISÃO.</em>
+          </h1>
+        </div>
         <p>
-          Treinamento com estratégia, acompanhamento
-          <br className="desktop-break" /> individualizado e foco na sua
-          evolução.
+          Treinamento com estratégia, acompanhamento individualizado e foco na
+          sua evolução.
         </p>
         <div className="hero-actions">
           <ContactButton onClick={contact}>QUERO COMEÇAR AGORA</ContactButton>
-          <a className="button button-ghost" href="#metodo">
-            <Play size={15} /> CONHECER O MÉTODO
+          <a className="hero-method-link" href="#metodo">
+            <span>
+              <Play size={13} />
+            </span>
+            CONHECER O MÉTODO
           </a>
         </div>
         <div className="hero-bottom-note">
-          <span>SEU OBJETIVO. SUA JORNADA.</span>
-          <span>UMA NOVA VERSÃO DE VOCÊ.</span>
+          <span>DISCIPLINA NO PRESENTE.</span>
+          <span>EVOLUÇÃO NO CAMINHO.</span>
         </div>
       </div>
-      <div className="hero-index">
-        01 <span>/ MD NATION</span>
+      <div className="hero-bottom">
+        <a className="scroll-cue" href="#sobre">
+          <span className="scroll-line" />
+          <span>CONTINUE A JORNADA</span>
+          <ArrowDown size={16} />
+        </a>
+        <span>
+          BUILT BY DISCIPLINE <i>+</i>
+        </span>
+        <span className="hero-page-number">001 / MD NATION</span>
       </div>
-      <a className="scroll-cue" href="#sobre">
-        <span>EXPLORE A SUA EVOLUÇÃO</span>
-        <ArrowDown size={17} />
-      </a>
-      <span className="image-credit">CENÁRIO ILUSTRATIVO · IA</span>
     </section>
   );
 }
 function AboutTrainer() {
   return (
     <section id="sobre" className="section about">
-      <div className="container about-grid">
-        <div className="about-art reveal">
-          <Image
-            src={client.trainerPhoto ?? "/images/strength.webp"}
-            alt={
-              client.trainerPhoto
-                ? "Matheus Dias"
-                : "Equipamento de treinamento. Imagem ilustrativa, não representa o treinador."
-            }
-            fill
-            sizes="(max-width: 768px) 100vw, 45vw"
-          />
-          <div className="art-cross">+</div>
-          <div className="photo-label">
-            {client.trainerPhoto
-              ? "MATHEUS DIAS / MD NATION"
-              : "FORÇA SE CONSTRÓI. TODOS OS DIAS."}
-            <small>
-              {client.trainerPhoto
-                ? "PERSONAL TRAINER & COACH"
-                : "IMAGEM ILUSTRATIVA · FOTO DO TREINADOR EM BREVE"}
-            </small>
-          </div>
-          <span className="frame-label">EST. A CADA NOVO COMEÇO</span>
+      <div className="container">
+        <div className="editorial-header">
+          <span>01 / O PROFISSIONAL</span>
+          <span>MATHEUS DIAS · MD NATION</span>
         </div>
-        <div className="about-copy reveal">
-          <Eyebrow>POR TRÁS DA MD NATION</Eyebrow>
-          <SectionTitle>
-            CONHEÇA
-            <br />
-            MATHEUS <em>DIAS.</em>
-          </SectionTitle>
-          <p className="lead">
-            Mais do que treinar, evoluir exige estratégia, disciplina e
-            acompanhamento.
-          </p>
-          <p>
-            {client.trainerBio ??
-              "Conheça o profissional por trás da MD Nation. Um espaço para conectar seus objetivos a uma jornada de treinamento com intenção, constância e atenção a cada etapa."}
-          </p>
-          <div className="principles">
-            {[
-              [Target, "ESTRATÉGIA", "Um caminho com direção."],
-              [Dumbbell, "DISCIPLINA", "Consistência em cada passo."],
-              [TrendingUp, "EVOLUÇÃO", "Respeito ao seu processo."],
-            ].map(([Icon, title, text]) => {
-              const I = Icon as typeof Target;
-              return (
-                <div key={String(title)}>
-                  <I size={21} />
+        <div className="about-grid">
+          <div className="about-copy reveal">
+            <Eyebrow>POR TRÁS DO MOVIMENTO</Eyebrow>
+            <SectionTitle>
+              CONHEÇA
+              <br />
+              MATHEUS <em>DIAS.</em>
+            </SectionTitle>
+            <p className="lead">
+              Treinar é uma parte.
+              <br />
+              Ter direção faz a diferença.
+            </p>
+            <p>
+              {client.trainerBio ??
+                "Mais do que treinar, evoluir exige estratégia, disciplina e acompanhamento. A MD Nation é o ponto de encontro entre seus objetivos e uma jornada de treinamento com intenção."}
+            </p>
+            <div className="principles">
+              {[
+                {
+                  Icon: Target,
+                  title: "Estratégia",
+                  text: "Um caminho com direção.",
+                },
+                {
+                  Icon: Dumbbell,
+                  title: "Disciplina",
+                  text: "Consistência em cada passo.",
+                },
+                {
+                  Icon: TrendingUp,
+                  title: "Evolução",
+                  text: "Respeito ao seu processo.",
+                },
+              ].map(({ Icon, title, text }, i) => (
+                <div key={title}>
+                  <span className="principle-number">0{i + 1}</span>
+                  <Icon size={21} />
                   <span>
-                    <strong>{String(title)}</strong>
-                    <small>{String(text)}</small>
+                    <strong>{title}</strong>
+                    <small>{text}</small>
                   </span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+            {client.professionalRegistration && (
+              <p className="registration">
+                Registro profissional: {client.professionalRegistration}
+              </p>
+            )}
+            <a
+              className="text-link"
+              href={client.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              CONHEÇA O MATHEUS NO INSTAGRAM <ArrowUpRight size={18} />
+            </a>
           </div>
-          {client.professionalRegistration && (
-            <p>Registro profissional: {client.professionalRegistration}</p>
-          )}
-          <p className="preview-note">
-            PRÉVIA EDITORIAL · Biografia, formação e registro profissional
-            aguardam validação.
-          </p>
-          <a
-            className="text-link"
-            href={client.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            CONHEÇA O PERFIL DO MATHEUS <ArrowUpRight size={17} />
-          </a>
+          <div className="about-composition reveal" data-tilt>
+            <div className="about-art">
+              <Image
+                src={client.trainerPhoto ?? media.about}
+                alt={
+                  client.trainerPhoto
+                    ? "Matheus Dias"
+                    : "Texturas de cordas em um ambiente de treinamento. Imagem conceitual."
+                }
+                fill
+                sizes="(max-width:850px) 100vw, 45vw"
+              />
+              <span className="art-cross">+</span>
+              <span className="about-vertical">
+                A FORÇA ESTÁ NA CONSTÂNCIA.
+              </span>
+            </div>
+            <div className="about-statement">
+              <span>MD / MINDSET</span>
+              <p>
+                MAIS INTENÇÃO.
+                <br />
+                <em>EM CADA REPETIÇÃO.</em>
+              </p>
+              <small>
+                {client.trainerPhoto
+                  ? "MATHEUS DIAS · PERSONAL TRAINER"
+                  : "IMAGEM CONCEITUAL · IA"}
+              </small>
+            </div>
+            <span className="about-caption">
+              {client.trainerBio
+                ? "UMA JORNADA COM DIREÇÃO."
+                : "PERFIL PROFISSIONAL EM VALIDAÇÃO · PRÉVIA EDITORIAL"}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -357,52 +413,60 @@ function Services({ contact }: { contact: (message?: string) => void }) {
       <div className="container">
         <div className="section-heading reveal">
           <div>
-            <Eyebrow>UM CAMINHO PARA O SEU OBJETIVO</Eyebrow>
+            <Eyebrow>ENCONTRE O SEU CAMINHO</Eyebrow>
             <SectionTitle>
-              COMO POSSO
+              NÃO EXISTE
               <br />
-              TE <em>AJUDAR?</em>
+              <em>UMA ÚNICA FORMA.</em>
             </SectionTitle>
           </div>
           <div className="heading-aside">
             <p>
-              Cada jornada começa de um jeito.
-              <br />
-              Descubra as possibilidades.
+              O seu objetivo é único.
+              <br />A conversa começa por ele.
             </p>
             <span className="demo-tag">
-              MODALIDADES DEMONSTRATIVAS · A CONFIRMAR
+              MODALIDADES ILUSTRATIVAS · CONSULTE DISPONIBILIDADE
             </span>
           </div>
         </div>
         <div className="services-grid">
-          {services.map((s, i) => {
-            const Icon = [Dumbbell, Monitor, ClipboardList][i];
+          {services.map((service, i) => {
+            const Icon =
+              service.icon === "dumbbell"
+                ? Dumbbell
+                : service.icon === "monitor"
+                  ? Monitor
+                  : ClipboardList;
             return (
-              <article className="service-card reveal" key={s.title}>
+              <article
+                className={`service-card service-card-${i + 1} reveal`}
+                key={service.title}
+                data-tilt
+              >
                 <div className="service-photo">
                   <Image
-                    src={s.image}
-                    alt={`Composição de equipamentos para ${s.title}. Imagem ilustrativa.`}
+                    src={service.image}
+                    alt={service.imageAlt}
                     fill
-                    sizes="(max-width: 680px) 100vw, 33vw"
+                    sizes="(max-width:680px) 100vw, (max-width:1024px) 50vw, 40vw"
                   />
                   <span className="service-number">0{i + 1}</span>
-                  <Icon size={25} />
+                  <span className="service-card-label">{service.tag}</span>
                 </div>
                 <div className="service-copy">
-                  <span className="tiny-label">{s.tag}</span>
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
+                  <Icon size={22} />
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
                   <button
                     className="service-link"
                     onClick={() =>
                       contact(
-                        `Olá, Matheus! Vi a prévia da MD Nation e gostaria de confirmar a disponibilidade de ${s.title.toLowerCase()} e saber mais.`,
+                        `Olá, Matheus! Conheci a MD Nation e gostaria de confirmar a disponibilidade de ${service.title.toLowerCase()} e saber mais.`,
                       )
                     }
                   >
-                    SOLICITAR INFORMAÇÕES <ArrowUpRight size={20} />
+                    SOLICITAR INFORMAÇÕES <ArrowUpRight size={22} />
                   </button>
                 </div>
               </article>
@@ -413,20 +477,28 @@ function Services({ contact }: { contact: (message?: string) => void }) {
     </section>
   );
 }
-function Method() {
+function Method({ contact }: { contact: () => void }) {
   const icons = [ScanLine, ClipboardList, Dumbbell, TrendingUp];
   return (
-    <section id="metodo" className="section method">
+    <section id="metodo" className="section method" data-scroll-scene>
       <div className="container">
-        <div className="center-heading reveal">
-          <Eyebrow>INTENÇÃO EM CADA ETAPA</Eyebrow>
-          <SectionTitle>
-            O MÉTODO <em>MD NATION.</em>
-          </SectionTitle>
-          <p>Uma jornada estruturada para transformar objetivos em evolução.</p>
-          <span className="tiny-label">
-            JORNADA DEMONSTRATIVA · FORMATO A VALIDAR
-          </span>
+        <div className="method-heading reveal">
+          <div>
+            <Eyebrow>O MÉTODO MD NATION</Eyebrow>
+            <SectionTitle>
+              EVOLUIR É<br />
+              <em>UM PROCESSO.</em>
+            </SectionTitle>
+          </div>
+          <div>
+            <p>
+              Uma jornada estruturada para transformar objetivos em evolução. Um
+              passo de cada vez.
+            </p>
+            <span className="tiny-label">
+              PROPOSTA DE JORNADA · FORMATO A CONFIRMAR
+            </span>
+          </div>
         </div>
         <div className="method-grid">
           {method.map((step, i) => {
@@ -434,10 +506,10 @@ function Method() {
             return (
               <article className="method-step reveal" key={step.title}>
                 <div className="step-top">
-                  <div className="step-icon">
-                    <Icon size={28} />
-                  </div>
                   <span>0{i + 1}</span>
+                  <div className="step-icon">
+                    <Icon size={25} />
+                  </div>
                 </div>
                 <h3>{step.title}</h3>
                 <p>{step.description}</p>
@@ -446,9 +518,10 @@ function Method() {
           })}
         </div>
         <div className="method-footer">
-          <span>SEM ATALHOS.</span>
-          <span>COM DIREÇÃO.</span>
-          <span>NO SEU RITMO.</span>
+          <p>O melhor ponto de partida é o seu.</p>
+          <button className="text-link" onClick={contact}>
+            QUERO COMEÇAR AGORA <ArrowUpRight size={19} />
+          </button>
         </div>
       </div>
     </section>
@@ -489,403 +562,78 @@ function ImageComparison({
 }
 function Results() {
   return (
-    <section id="resultados" className="section results">
+    <section
+      id="resultados"
+      className={`section results ${results.length ? "has-results" : ""}`}
+    >
       <div className="container results-grid">
-        <div className="reveal">
-          <Eyebrow>HISTÓRIAS DE EVOLUÇÃO</Eyebrow>
+        <div className="results-copy reveal">
+          <Eyebrow>
+            {results.length
+              ? "HISTÓRIAS DE EVOLUÇÃO"
+              : "EVOLUÇÃO É MAIS DO QUE UMA IMAGEM"}
+          </Eyebrow>
           <SectionTitle>
             VAI ALÉM
             <br />
             DA <em>ESTÉTICA.</em>
           </SectionTitle>
-          <p>
-            Seu processo merece ser contado com verdade.
+          <p className="lead">
+            Nem tudo o que muda
             <br />
-            Cada história tem seu próprio tempo.
+            cabe em uma fotografia.
           </p>
-          <span className="demo-tag">
-            ESPAÇO RESERVADO PARA RESULTADOS AUTORIZADOS
-          </span>
+          <p>
+            Construir uma rotina, compreender o processo e encontrar constância
+            também fazem parte de evoluir. Cada trajetória tem seu próprio
+            ritmo.
+          </p>
+          {!results.length && (
+            <div className="evolution-points">
+              <span>
+                <Check size={16} /> Mais atenção ao processo
+              </span>
+              <span>
+                <Check size={16} /> Consistência na rotina
+              </span>
+              <span>
+                <Check size={16} /> Objetivos com direção
+              </span>
+            </div>
+          )}
+          <a className="text-link" href="#objetivos">
+            QUAL É O SEU PRÓXIMO PASSO? <ArrowUpRight size={18} />
+          </a>
         </div>
-        <div className="result-placeholder reveal">
+        <div className="results-visual reveal">
           {results.length ? (
             results.map((r) => (
-              <div key={r.name}>
+              <article key={r.name}>
                 <ImageComparison {...r} />
                 <h3>{r.name}</h3>
                 <p>{r.description}</p>
-              </div>
+              </article>
             ))
           ) : (
             <>
-              <div className="placeholder-grid">
-                <div>
-                  <span>01</span>
-                  <Plus size={32} />
-                  <small>ANTES</small>
-                </div>
-                <div>
-                  <span>02</span>
-                  <Plus size={32} />
-                  <small>DEPOIS</small>
-                </div>
-              </div>
-              <div className="placeholder-caption">
-                <LockKeyhole size={17} />
-                <p>
-                  Resultados reais. Histórias autorizadas.
-                  <small>
-                    Nenhuma transformação fictícia. Em breve, com a autorização
-                    de cada aluno.
-                  </small>
-                </p>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </section>
-  );
-}
-function TrainingExperience() {
-  const [day, setDay] = useState(0);
-  return (
-    <section className="section experience">
-      <div className="container experience-grid">
-        <div className="phone-scene reveal">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="phone">
-            <div className="phone-camera" />
-            <div className="phone-top">
-              <Wordmark />
-              <span>PRÉVIA</span>
-            </div>
-            <p className="tiny-label">UM PASSO DE CADA VEZ</p>
-            <h3>
-              Seu próximo
-              <br />
-              <em>movimento.</em>
-            </h3>
-            <div className="phone-days">
-              {["S", "T", "Q", "Q", "S", "S", "D"].map((d, i) => (
-                <button
-                  key={i}
-                  className={day === i ? "selected" : ""}
-                  onClick={() => setDay(i)}
-                  title={`Ver dia ${i + 1} da semana demonstrativa`}
-                  aria-pressed={day === i}
-                >
-                  {d}
-                  <small>{12 + i}</small>
-                </button>
-              ))}
-            </div>
-            <div className="phone-workout">
-              <span>PLANEJAMENTO CONCEITUAL</span>
-              <h4>
-                {
-                  [
-                    "Força & constância",
-                    "Movimento & rotina",
-                    "Foco & técnica",
-                    "Pausa & equilíbrio",
-                    "Intenção & progresso",
-                    "Rotina & energia",
-                    "Recuperar & recomeçar",
-                  ][day]
-                }
-              </h4>
-              <div className="workout-bars">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-              <div>
-                <Check size={15} /> Seu ritmo. Seu processo.
-              </div>
-            </div>
-            <div className="phone-stat">
-              <Activity size={24} />
-              <div>
-                Consistência faz parte.<small>Uma etapa por vez.</small>
-              </div>
-              <ArrowUpRight size={16} />
-            </div>
-            <span className="phone-disclaimer">INTERFACE DEMONSTRATIVA</span>
-          </div>
-          <span className="scene-note">
-            DESIGN CONCEITUAL / NÃO É UM APLICATIVO DISPONÍVEL
-          </span>
-        </div>
-        <div className="reveal">
-          <Eyebrow>ROTINA COM MAIS CLAREZA</Eyebrow>
-          <SectionTitle>
-            ACOMPANHAMENTO
-            <br />
-            NA PALMA DA
-            <br />
-            <em>SUA MÃO.</em>
-          </SectionTitle>
-          <p className="lead">
-            Uma visão de como organização e treinamento podem caminhar juntos.
-          </p>
-          <p>
-            Treinos, planejamento e evolução reunidos em uma experiência
-            simples. Explore o conceito ao lado.
-          </p>
-          <ul className="check-list">
-            <li>
-              <Check />
-              Organização da rotina de treinamento
-            </li>
-            <li>
-              <Check />
-              Visão das etapas e dos objetivos
-            </li>
-            <li>
-              <Check />
-              Atenção à consistência do processo
-            </li>
-          </ul>
-          <p className="preview-note">
-            Conceito visual demonstrativo. Ferramentas, recursos e canais de
-            acompanhamento dependem de confirmação do treinador. Não representa
-            um aplicativo próprio.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-const quizQuestions = [
-  {
-    title: "Qual é o seu próximo objetivo?",
-    hint: "O primeiro passo é saber aonde você quer chegar.",
-    options: [
-      "Hipertrofia",
-      "Emagrecimento",
-      "Condicionamento físico",
-      "Qualidade de vida",
-      "Melhorar a rotina de treinamento",
-    ],
-  },
-  {
-    title: "Qual é o seu nível de experiência?",
-    hint: "Todo ponto de partida merece atenção.",
-    options: [
-      "Estou começando",
-      "Já treino há algum tempo",
-      "Tenho experiência e quero evoluir",
-    ],
-  },
-  {
-    title: "Como prefere ser acompanhado?",
-    hint: "Uma preferência para a conversa. Disponibilidade a confirmar.",
-    options: ["Presencial", "Online", "Quero entender as possibilidades"],
-  },
-  {
-    title: "Quantos dias por semana?",
-    hint: "Pense em uma frequência que se encaixa na sua rotina.",
-    options: ["2 dias", "3 dias", "4 dias", "5 dias ou mais", "Ainda não sei"],
-  },
-];
-function GoalsQuiz({ contact }: { contact: (message?: string) => void }) {
-  const [step, setStep] = useState(0),
-    [answers, setAnswers] = useState<string[]>([]),
-    [name, setName] = useState(""),
-    [consent, setConsent] = useState(false),
-    [finished, setFinished] = useState(false);
-  const heading = useRef<HTMLHeadingElement>(null);
-  function advance() {
-    setStep(step + 1);
-    setTimeout(() => heading.current?.focus(), 0);
-  }
-  const message = `Olá, Matheus! Meu nome é ${name.trim()}. Conheci a MD Nation e gostaria de conversar sobre acompanhamento.\nObjetivo: ${answers[0]}\nExperiência: ${answers[1]}\nPreferência de atendimento: ${answers[2]}\nFrequência pretendida: ${answers[3]}.`;
-  return (
-    <section id="objetivos" className="section quiz-section">
-      <div className="container quiz-layout">
-        <div className="quiz-intro reveal">
-          <Eyebrow>SEU PRIMEIRO MOVIMENTO</Eyebrow>
-          <SectionTitle>
-            O PRÓXIMO
-            <br />
-            PASSO É<br />
-            <em>SEU.</em>
-          </SectionTitle>
-          <p>
-            Conte um pouco sobre seu objetivo.
-            <br />
-            Vamos começar essa conversa?
-          </p>
-          <div className="quiz-time">
-            <span />
-            <small>5 PERGUNTAS · NO SEU RITMO</small>
-          </div>
-        </div>
-        <div className="quiz-panel reveal">
-          <div className="quiz-progress-label">
-            <span>SEU PONTO DE PARTIDA</span>
-            <span>{finished ? "RESUMO" : `0${step + 1} / 05`}</span>
-          </div>
-          <div className="quiz-progress">
-            <span style={{ width: `${finished ? 100 : (step + 1) * 20}%` }} />
-          </div>
-          {finished ? (
-            <>
-              <h3 tabIndex={-1} ref={heading}>
-                Vamos conversar, {name.trim()}.
-              </h3>
-              <p>Confira seu resumo antes de compartilhar.</p>
-              <dl className="quiz-summary">
-                {answers.map((a, i) => (
-                  <div key={i}>
-                    <dt>
-                      {
-                        [
-                          "Objetivo",
-                          "Experiência",
-                          "Atendimento preferido",
-                          "Frequência",
-                        ][i]
-                      }
-                    </dt>
-                    <dd>{a}</dd>
-                  </div>
-                ))}
-              </dl>
-              <ContactButton onClick={() => contact(message)}>
-                CONVERSAR COM MATHEUS
-              </ContactButton>
-              <button
-                className="back-button"
-                onClick={() => {
-                  setFinished(false);
-                  setStep(0);
-                }}
-              >
-                Revisar respostas
-              </button>
-              <small className="privacy-inline">
-                O envio só acontece por sua ação no WhatsApp. Este formulário
-                não envia nem armazena suas respostas em um servidor.
-              </small>
-            </>
-          ) : step < 4 ? (
-            <>
-              <h3 tabIndex={-1} ref={heading}>
-                {quizQuestions[step].title}
-              </h3>
-              <p>{quizQuestions[step].hint}</p>
-              <div
-                className="quiz-options"
-                role="radiogroup"
-                aria-label={quizQuestions[step].title}
-              >
-                {quizQuestions[step].options.map((option) => (
-                  <label
-                    key={option}
-                    className={
-                      answers[step] === option
-                        ? "quiz-option active"
-                        : "quiz-option"
-                    }
-                  >
-                    <input
-                      type="radio"
-                      name={`step-${step}`}
-                      checked={answers[step] === option}
-                      onChange={() =>
-                        setAnswers((prev) => {
-                          const next = [...prev];
-                          next[step] = option;
-                          return next;
-                        })
-                      }
-                    />
-                    <span>{option}</span>
-                    <span className="radio-dot">
-                      {answers[step] === option && <Check size={11} />}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              <div className="quiz-controls">
-                <button
-                  className="back-button"
-                  onClick={() => setStep(step - 1)}
-                  disabled={step === 0}
-                >
-                  Voltar
-                </button>
-                <button
-                  className="button"
-                  onClick={advance}
-                  disabled={!answers[step]}
-                >
-                  CONTINUAR <ArrowRight size={18} />
-                </button>
-              </div>
-            </>
-          ) : (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (name.trim().length >= 2 && consent) {
-                  setFinished(true);
-                  setTimeout(() => heading.current?.focus(), 0);
-                }
-              }}
-            >
-              <h3 tabIndex={-1} ref={heading}>
-                Como podemos te chamar?
-              </h3>
-              <p>Seu nome e seu objetivo. A conversa começa por aqui.</p>
-              <label className="input-label" htmlFor="visitor-name">
-                SEU NOME
-              </label>
-              <input
-                id="visitor-name"
-                className="name-input"
-                autoComplete="given-name"
-                minLength={2}
-                maxLength={60}
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Digite seu nome"
+              <Image
+                src={media.evolution}
+                alt="Tênis de treinamento e corda sobre o piso. Imagem conceitual gerada por IA."
+                fill
+                sizes="(max-width:850px) 100vw, 50vw"
               />
-              <label className="consent">
-                <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                  required
-                />
+              <span className="results-image-label">01 / CONSISTÊNCIA</span>
+              <div className="evolution-caption">
                 <span>
-                  Concordo em compartilhar meu nome e as respostas com Matheus
-                  ao enviar a mensagem no WhatsApp.
+                  A SUA MELHOR
+                  <br />
+                  VERSÃO ESTÁ
+                  <br />
+                  <em>EM CONSTRUÇÃO.</em>
                 </span>
-              </label>
-              <div className="quiz-controls">
-                <button
-                  type="button"
-                  className="back-button"
-                  onClick={() => setStep(3)}
-                >
-                  Voltar
-                </button>
-                <button
-                  className="button"
-                  type="submit"
-                  disabled={name.trim().length < 2 || !consent}
-                >
-                  VER MEU RESUMO <ArrowRight size={18} />
-                </button>
+                <small>REFLEXÃO EDITORIAL · IMAGEM CONCEITUAL / IA</small>
               </div>
-            </form>
+            </>
           )}
         </div>
       </div>
@@ -894,150 +642,62 @@ function GoalsQuiz({ contact }: { contact: (message?: string) => void }) {
 }
 function Testimonials() {
   const [index, setIndex] = useState(0);
+  if (!testimonials.length)
+    return (
+      <section className="discipline-note" aria-label="O valor da constância">
+        <div className="container">
+          <span>MD / BUILT BY DISCIPLINE</span>
+          <p>
+            O QUE VOCÊ FAZ COM CONSTÂNCIA
+            <br />
+            <em>CONSTRÓI QUEM VOCÊ SE TORNA.</em>
+          </p>
+          <a href="#objetivos" aria-label="Descobrir meu próximo objetivo">
+            <ArrowUpRight size={32} />
+          </a>
+        </div>
+      </section>
+    );
   return (
     <section className="section testimonials">
       <div className="container testimonial-layout">
         <div>
-          <Eyebrow>VOZES DA JORNADA</Eyebrow>
+          <Eyebrow>HISTÓRIAS REAIS</Eyebrow>
           <SectionTitle>
-            O QUE OS
+            QUEM VIVE,
             <br />
-            ALUNOS <em>DIZEM.</em>
+            <em>CONTA.</em>
           </SectionTitle>
         </div>
         <div className="testimonial-space">
-          {testimonials.length ? (
-            <>
-              <blockquote>
-                “{testimonials[index].text}”
-                <cite>{testimonials[index].name}</cite>
-              </blockquote>
-              <div className="carousel-controls">
-                <button
-                  aria-label="Depoimento anterior"
-                  onClick={() =>
-                    setIndex(
-                      (index - 1 + testimonials.length) % testimonials.length,
-                    )
-                  }
-                >
-                  ←
-                </button>
-                <button
-                  aria-label="Próximo depoimento"
-                  onClick={() => setIndex((index + 1) % testimonials.length)}
-                >
-                  →
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <span className="quote-symbol">“</span>
-              <p>
-                Histórias de verdade
-                <br />
-                merecem vozes de verdade.
-              </p>
-              <small>
-                ESPAÇO PREPARADO PARA DEPOIMENTOS REAIS E AUTORIZADOS.
-              </small>
-              <span className="demo-tag">CONTEÚDO AINDA NÃO DISPONÍVEL</span>
-            </>
-          )}
-        </div>
-      </div>
-    </section>
-  );
-}
-function Gallery({ openVideo }: { openVideo: (src: string) => void }) {
-  const [selected, setSelected] = useState<string | null>(null);
-  return (
-    <section id="galeria" className="section gallery">
-      <div className="container">
-        <div className="section-heading">
-          <div>
-            <Eyebrow>A ESSÊNCIA DO MOVIMENTO</Eyebrow>
-            <SectionTitle>
-              TREINO. DISCIPLINA.
-              <br />
-              <em>EVOLUÇÃO.</em>
-            </SectionTitle>
-          </div>
-          <p className="heading-aside">
-            Um olhar sobre o universo MD Nation.
-            <br />
-            <span className="tiny-label">
-              GALERIA CONCEITUAL · IMAGENS GERADAS POR IA
+          <span className="quote-symbol">“</span>
+          <blockquote>
+            {testimonials[index].text}
+            <cite>{testimonials[index].name}</cite>
+          </blockquote>
+          <div className="carousel-controls">
+            <button
+              aria-label="Depoimento anterior"
+              onClick={() =>
+                setIndex(
+                  (index - 1 + testimonials.length) % testimonials.length,
+                )
+              }
+            >
+              <ArrowRight style={{ transform: "rotate(180deg)" }} />
+            </button>
+            <span>
+              {index + 1} / {testimonials.length}
             </span>
-          </p>
-        </div>
-        <div className="gallery-grid">
-          {[
-            ["/images/gym.webp", "O AMBIENTE", "01"],
-            ["/images/strength.webp", "A CONSTÂNCIA", "02"],
-            ["/images/detail.webp", "A INTENÇÃO", "03"],
-          ].map(([src, title, n]) => (
             <button
-              key={src}
-              className="gallery-item reveal"
-              onClick={() => setSelected(src)}
-              title={`Ampliar imagem ilustrativa: ${title}`}
+              aria-label="Próximo depoimento"
+              onClick={() => setIndex((index + 1) % testimonials.length)}
             >
-              <Image
-                src={src}
-                alt={`Equipamentos de academia: ${title}. Imagem ilustrativa gerada por IA.`}
-                fill
-                sizes="(max-width:680px) 100vw, 50vw"
-              />
-              <span>
-                <small>{n} / MD NATION</small>
-                {title}
-              </span>
-              <Plus size={20} />
+              <ArrowRight />
             </button>
-          ))}
-          {videos.map((v) => (
-            <button
-              key={v.src}
-              className="gallery-item"
-              onClick={() => openVideo(v.src)}
-            >
-              <Image src={v.poster} alt={v.title} fill sizes="50vw" />
-              <Play />
-              <span>{v.title}</span>
-            </button>
-          ))}
-        </div>
-        <div className="gallery-footer">
-          <span>SEM PERSONAGENS FICTÍCIOS. ESPAÇO PARA CONTEÚDOS REAIS.</span>
-          <a
-            className="text-link"
-            href={client.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Instagram size={16} /> @THEUSDIAS_TREINADOR{" "}
-            <ArrowUpRight size={17} />
-          </a>
+          </div>
         </div>
       </div>
-      {selected && (
-        <Modal title="Galeria ilustrativa" onClose={() => setSelected(null)}>
-          <div className="lightbox-image">
-            <Image
-              src={selected}
-              alt="Composição de equipamentos de academia. Imagem ilustrativa gerada por IA."
-              fill
-              sizes="90vw"
-            />
-          </div>
-          <p className="modal-caption">
-            Imagem conceitual gerada por IA. Não representa o local de
-            atendimento.
-          </p>
-        </Modal>
-      )}
     </section>
   );
 }
@@ -1046,17 +706,24 @@ function FAQ() {
     <section className="section faq" id="duvidas">
       <div className="container faq-grid">
         <div>
-          <Eyebrow>CLAREZA PARA COMEÇAR</Eyebrow>
+          <Eyebrow>CLAREZA ANTES DE COMEÇAR</Eyebrow>
           <SectionTitle>
-            ANTES DO
+            BOAS PERGUNTAS.
             <br />
-            PRIMEIRO <em>PASSO.</em>
+            <em>NOVOS COMEÇOS.</em>
           </SectionTitle>
           <p>
-            Algumas respostas para ajudar
-            <br />a iniciar sua jornada.
+            Tire as primeiras dúvidas.
+            <br />O próximo passo é uma conversa.
           </p>
-          <span className="demo-tag">INFORMAÇÕES COMERCIAIS A CONFIRMAR</span>
+          <a
+            href={client.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-link"
+          >
+            FALAR PELO INSTAGRAM <ArrowUpRight size={17} />
+          </a>
         </div>
         <div className="faq-list">
           {faqs.map(([q, a], i) => (
@@ -1064,9 +731,11 @@ function FAQ() {
               <summary>
                 <span className="faq-number">0{i + 1}</span>
                 <span>{q}</span>
-                <ChevronDown size={18} />
+                <Plus size={18} />
               </summary>
-              <p>{a}</p>
+              <div className="faq-answer">
+                <p>{a}</p>
+              </div>
             </details>
           ))}
         </div>
@@ -1076,27 +745,35 @@ function FAQ() {
 }
 function FinalCTA({ contact }: { contact: () => void }) {
   return (
-    <section id="contato" className="final-cta">
-      <Image src="/images/gym.webp" alt="" fill sizes="100vw" />
+    <section id="contato" className="final-cta" data-scroll-scene>
+      <Image
+        src={media.cta}
+        alt="Corredor de academia com iluminação vermelha. Imagem conceitual."
+        fill
+        sizes="100vw"
+      />
       <div className="cta-shade" />
       <div className="container">
-        <Eyebrow>SUA JORNADA COMEÇA AQUI</Eyebrow>
+        <div className="cta-top">
+          <span>O SEU PRÓXIMO CAPÍTULO.</span>
+          <span>COMEÇA COM VOCÊ.</span>
+        </div>
+        <Eyebrow>MENOS ADIAR. MAIS COMEÇAR.</Eyebrow>
         <h2>
           PRONTO PARA
           <br />
           <em>EVOLUIR?</em>
         </h2>
-        <p>
-          Dê o primeiro passo e descubra como um acompanhamento
-          <br className="desktop-break" /> personalizado pode ajudar na sua
-          jornada.
-        </p>
-        <ContactButton onClick={contact}>
-          QUERO INICIAR MEU ACOMPANHAMENTO
-        </ContactButton>
-        <span className="cta-footnote">
-          UMA DECISÃO HOJE. UM NOVO CAMINHO À FRENTE.
-        </span>
+        <div className="cta-bottom">
+          <p>
+            Dê o primeiro passo e descubra como um acompanhamento personalizado
+            pode ajudar na sua jornada.
+          </p>
+          <ContactButton onClick={contact}>
+            QUERO INICIAR MEU ACOMPANHAMENTO
+          </ContactButton>
+        </div>
+        <span className="cta-credit">IMAGEM CONCEITUAL · IA</span>
       </div>
     </section>
   );
@@ -1106,10 +783,7 @@ function Footer({ privacy }: { privacy: () => void }) {
     <footer>
       <div className="container">
         <div className="footer-top">
-          <a
-            href="#inicio"
-            title="MD Nation — voltar ao início"
-          >
+          <a href="#inicio" title="MD Nation — voltar ao início">
             <Wordmark />
           </a>
           <p>ESTRATÉGIA. DISCIPLINA. EVOLUÇÃO.</p>
@@ -1145,75 +819,13 @@ function Footer({ privacy }: { privacy: () => void }) {
     </footer>
   );
 }
-function Modal({
-  title,
-  children,
-  onClose,
-}: {
-  title: string;
-  children: ReactNode;
-  onClose: () => void;
-}) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const d = ref.current;
-    const previous = document.activeElement as HTMLElement | null;
-    d?.showModal();
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      d?.close();
-      document.body.style.overflow = overflow;
-      previous?.focus();
-    };
-  }, []);
-  return (
-    <dialog
-      ref={ref}
-      className="modal"
-      aria-label={title}
-      onCancel={(e) => {
-        e.preventDefault();
-        onClose();
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="modal-inner">
-        <button
-          className="modal-close"
-          onClick={onClose}
-          aria-label="Fechar janela"
-        >
-          <X />
-        </button>
-        <h2>{title}</h2>
-        {children}
-      </div>
-    </dialog>
-  );
-}
 export default function LandingPage() {
   const [modal, setModal] = useState<"contact" | "privacy" | null>(null),
     [video, setVideo] = useState<string | null>(null),
     [message, setMessage] = useState(client.message),
     [copied, setCopied] = useState(false),
     [copyError, setCopyError] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("revealed");
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.08 },
-    );
-    document.querySelectorAll(".reveal").forEach((e) => observer.observe(e));
-    return () => observer.disconnect();
-  }, []);
+  useCinematicMotion();
   function contact(customMessage?: string) {
     const text = customMessage ?? client.message;
     const url = whatsappUrl(text);
@@ -1238,7 +850,7 @@ export default function LandingPage() {
         <div className="brand-strip">
           <span>MD NATION</span>
           <i>+</i>
-          <span>FEITO DE DISCIPLINA</span>
+          <span>BUILT BY DISCIPLINE</span>
           <i>+</i>
           <span>MOVIDO POR EVOLUÇÃO</span>
           <i>+</i>
@@ -1247,9 +859,10 @@ export default function LandingPage() {
         </div>
         <AboutTrainer />
         <Services contact={contact} />
-        <Method />
+        <Method contact={() => contact()} />
         <Results />
         <TrainingExperience />
+        <CinematicFilm />
         <GoalsQuiz contact={contact} />
         <Testimonials />
         <Gallery openVideo={setVideo} />
@@ -1257,6 +870,18 @@ export default function LandingPage() {
         <FinalCTA contact={() => contact()} />
       </main>
       <Footer privacy={() => setModal("privacy")} />
+      {whatsappUrl() && (
+        <a
+          className="floating-contact"
+          href={whatsappUrl()!}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <MessageCircle size={21} />
+          <span>Vamos conversar</span>
+          <ArrowUpRight size={16} />
+        </a>
+      )}
       {modal === "contact" && (
         <Modal
           title="Seu próximo passo está aqui."

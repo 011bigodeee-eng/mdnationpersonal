@@ -21,16 +21,18 @@ export const services = [
     title: "Personal presencial",
     tag: "01 / LADO A LADO",
     description:
-      "Uma proposta de atenção individual durante o treino, com orientação próxima em cada etapa.",
-    image: "/images/strength.webp",
+      "A possibilidade de ter orientação próxima, com atenção ao movimento e ao seu processo.",
+    image: "/images/service-strength.webp",
+    imageAlt: "Halter sobre piso de academia. Imagem conceitual.",
     icon: "dumbbell",
   },
   {
     title: "Consultoria online",
     tag: "02 / ONDE VOCÊ ESTIVER",
     description:
-      "Uma possibilidade de organizar sua rotina de treinamento com orientação à distância.",
-    image: "/images/detail.webp",
+      "Orientação à distância para aproximar seu objetivo da sua rotina, onde você estiver.",
+    image: "/images/service-online.webp",
+    imageAlt: "Notebook em um ambiente de treinamento. Imagem conceitual.",
     icon: "monitor",
   },
   {
@@ -38,7 +40,8 @@ export const services = [
     tag: "03 / SEU PRÓXIMO PASSO",
     description:
       "Uma proposta de planejamento que considera objetivos, experiência e rotina.",
-    image: "/images/gym.webp",
+    image: "/images/service-plan.webp",
+    imageAlt: "Caderno e equipamentos de planejamento. Imagem conceitual.",
     icon: "clipboard",
   },
 ];
@@ -70,11 +73,11 @@ export const faqs = [
   ],
   [
     "O treinamento é personalizado?",
-    "A proposta apresentada nesta prévia é de atenção individual. Matheus poderá explicar como a avaliação e o planejamento se aplicam ao seu caso antes da contratação.",
+    "Objetivos, rotina e experiência são pontos de partida para essa conversa. Matheus explica como o planejamento pode se aplicar ao seu caso.",
   ],
   [
     "Existe atendimento online?",
-    "As modalidades desta página são demonstrativas. Consulte Matheus para confirmar se há atendimento online e conhecer as condições disponíveis.",
+    "Converse com Matheus para consultar a disponibilidade de atendimento online e entender o formato.",
   ],
   [
     "Como posso começar?",
@@ -86,7 +89,7 @@ export const faqs = [
   ],
   [
     "Como funciona a avaliação inicial?",
-    "Os critérios, o formato e a disponibilidade da avaliação devem ser confirmados com Matheus. Não é necessário enviar informações médicas neste site.",
+    "O formato e os critérios são explicados diretamente por Matheus. Aqui, você pode compartilhar seu objetivo sem enviar dados médicos.",
   ],
 ];
 export const results: {
@@ -97,3 +100,31 @@ export const results: {
 }[] = [];
 export const testimonials: { name: string; text: string }[] = [];
 export const videos: { title: string; src: string; poster: string }[] = [];
+
+/** Assets editoriais exclusivos por seção; substituir somente por material autorizado. */
+export const media = {
+  hero: "/images/hero-editorial.webp",
+  about: "/images/about-ropes.webp",
+  evolution: "/images/evolution.webp",
+  film: "/images/film-still.webp",
+  cta: "/images/final-corridor.webp",
+  featuredVideo: null as { src: string; captions?: string } | null,
+  gallery: [
+    {
+      src: "/images/gallery-chalk.webp",
+      title: "A PREPARAÇÃO",
+      caption:
+        "Bacia de magnésio em um cenário de treinamento. Imagem conceitual.",
+    },
+    {
+      src: "/images/gallery-pulley.webp",
+      title: "A PRECISÃO",
+      caption: "Detalhe de polia e cabo de equipamento. Imagem conceitual.",
+    },
+    {
+      src: "/images/gym.webp",
+      title: "O AMBIENTE",
+      caption: "Composição de academia e anilhas. Imagem conceitual.",
+    },
+  ],
+};

@@ -24,17 +24,21 @@ npm run build
 npm run test:e2e
 ```
 
-Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em outra máquina, ajuste `executablePath` em `playwright.config.ts` ou remova essa opção e instale o navegador com `npx playwright install chromium`. A suíte cobre 320, 375, 390, 430, 768, 1024 e 1440 px, imagens, overflow, menu mobile, FAQ, questionário, consentimento, resumo, abertura, galeria, mockup e acessibilidade WCAG com axe.
+Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em outra máquina, ajuste `executablePath` em `playwright.config.ts` ou remova essa opção e instale o navegador com `npx playwright install chromium`. A suíte cobre 320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440 e 1920 px, imagens, overflow, menu mobile, FAQ, questionário, consentimento, resumo, abertura, galeria, mockup e acessibilidade WCAG com axe.
 
 ## Estrutura
 
 - `app/page.tsx`: entrada da página.
 - `app/layout.tsx`: fontes locais, idioma, metadata e Open Graph condicional ao domínio.
 - `app/globals.css`: sistema visual, seções, responsividade e movimento reduzido.
-- `components/LandingPage.tsx`: componentes Navbar, CinematicIntro, Hero, AboutTrainer, Services, Method, Results, TrainingExperience, GoalsQuiz, Testimonials, Gallery, FAQ, FinalCTA, Footer e Modal.
+- `components/LandingPage.tsx`: composição da página, Navbar, CinematicIntro, Hero, AboutTrainer, Services, Method, Results, Testimonials, FAQ, FinalCTA e Footer.
+- `components/GoalsQuiz.tsx`, `Gallery.tsx` e `TrainingExperience.tsx`: interações preservadas, em chunks separados.
+- `components/CinematicFilm.tsx`: manifesto expansivo, com foto estática e vídeo autorizado opcional.
+- `components/Primitives.tsx`, `Modal.tsx`, `hooks/useCinematicMotion.ts`: elementos compartilhados, diálogos e movimento progressivo.
+- `lib/accessibility.ts`: ciclo de foco por teclado nos diálogos.
 - `lib/content.ts`: configuração central de cliente, links, serviços, método, perguntas, resultados, depoimentos e vídeos.
-- `public/images/`: três imagens WebP de equipamentos geradas para esta prévia.
-- `tests/landing.spec.ts`: testes funcionais e de acessibilidade.
+- `public/images/`: onze imagens WebP de ambientes e equipamentos, com recurso exclusivo por seção.
+- `tests/landing.spec.ts` e `tests/reform.spec.ts`: testes funcionais, acessibilidade, menu, teclado, persistência entre etapas e responsividade.
 
 ## Personalizar com dados confirmados
 
@@ -62,6 +66,16 @@ Os dois ZIPs recebidos contêm referências conceituais com rostos, interfaces e
 
 Antes de publicação comercial: confirmar WhatsApp, domínio, logo, fotos reais, história/formação/registro profissional, modalidades, funcionamento da avaliação, ferramentas de acompanhamento, depoimentos, resultados e vídeos autorizados. Revisar a política de privacidade conforme as operações reais do responsável. Não há preços, certificações, métricas ou transformações inventadas.
 
-A abertura dura cerca de 2,1 segundos, tem botão de pular, não toca áudio e não se repete na mesma sessão. Animações leves usam CSS e IntersectionObserver; parallax limitado ao desktop, sem bibliotecas de animação ou 3D pesadas. O modo de movimento reduzido desativa os efeitos. Os diálogos nativos oferecem Escape e contenção de foco.
+A abertura dura cerca de 1,65 segundo, tem botão de pular, não toca áudio e não se repete na mesma sessão. Animações leves usam CSS, IntersectionObserver e um único ciclo de requestAnimationFrame para o scroll. Parallax e tilt são limitados ao desktop; a linha do método acompanha o progresso, o smartphone muda de perspectiva e o manifesto expande sem prender a rolagem. Não há bibliotecas de animação ou 3D pesadas. O modo de movimento reduzido desativa os efeitos. Os diálogos nativos oferecem Escape e contenção de foco.
 
 A aplicação e o ambiente foram preparados localmente. Publicação do site, configuração de domínio e publicação do snapshot do ambiente são operações separadas.
+
+## Reformulação — Built by Discipline
+
+Hero com composição própria para mobile, imagens de cada seção sem repetição, serviços assimétricos no desktop e compactos no celular. Sem material real de alunos, Resultados apresenta conteúdo editorial sobre constância; Depoimentos permanece preparado e a apresentação pública utiliza uma faixa de conteúdo institucional.
+
+Configure as imagens e a galeria em `media`, dentro de `lib/content.ts`. Para o manifesto expansivo, `media.featuredVideo` aceita `{src, captions?}` de arquivo autorizado. O player só abre por interação, começa sem som e mantém controles nativos. Enquanto o valor for `null`, a composição estática permanece completa, sem botão fictício de reprodução. Use legendas para vídeos com fala.
+
+O menu mobile é um diálogo com bloqueio de scroll, Escape, retorno de foco ao botão e fechamento ao navegar ou ampliar para desktop. Todos os diálogos mantêm o foco no teclado. O questionário preserva escolhas e nome ao voltar; o resumo não compartilha dados sem ação explícita.
+
+A auditoria e a comparação local estão documentadas em `docs/REFORMULATION.md`.

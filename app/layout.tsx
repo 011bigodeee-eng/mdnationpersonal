@@ -86,7 +86,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(sessionStorage.getItem('md-intro')||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.mdIntro='skip'}catch{}`,
+            __html: `document.documentElement.dataset.mdIntroStarted=String(performance.now());try{if(sessionStorage.getItem('md-intro')||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.mdIntro='skip'}catch{}`,
           }}
         />
       </head>
