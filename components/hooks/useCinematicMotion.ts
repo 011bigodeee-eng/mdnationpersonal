@@ -36,6 +36,16 @@ export function useCinematicMotion() {
             ),
           );
           el.style.setProperty("--scene-progress", progress.toFixed(4));
+          if (el.dataset.scrollScene === "discipline") {
+            const range = height * (window.innerWidth <= 680 ? 0.27 : 0.5);
+            const fill = Math.max(
+              0,
+              Math.min(1, (height * 0.76 - rect.top) / range),
+            );
+            const next = fill.toFixed(4);
+            if (el.style.getPropertyValue("--discipline-progress") !== next)
+              el.style.setProperty("--discipline-progress", next);
+          }
           if (el.id === "inicio" && desktop.matches)
             el.style.setProperty(
               "--hero-offset",
@@ -51,6 +61,7 @@ export function useCinematicMotion() {
       if (reduce.matches) {
         scenes.forEach((el) => {
           el.style.removeProperty("--scene-progress");
+          el.style.removeProperty("--discipline-progress");
           el.style.removeProperty("--hero-offset");
         });
       } else update();

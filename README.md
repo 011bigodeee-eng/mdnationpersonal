@@ -31,9 +31,10 @@ Os testes de navegador usam o Chromium do ambiente (`/usr/bin/chromium`). Em out
 - `app/page.tsx`: entrada da página.
 - `app/layout.tsx`: fontes locais, idioma, metadata e Open Graph condicional ao domínio.
 - `app/globals.css`: sistema visual e estilos das demais seções.
-- `app/hero.css`: Hero, faixa contínua, breakpoints próprios e movimento reduzido, sem overrides espalhados.
+- `app/hero.css`: Hero, breakpoints próprios e movimento reduzido, sem overrides espalhados.
 - `components/LandingPage.tsx`: composição da página, Navbar, CinematicIntro, AboutTrainer, Services, Method, Results, Testimonials, FAQ, FinalCTA e Footer.
-- `components/Hero.tsx` e `BrandMarquee.tsx`: Hero com ordem natural no HTML e faixa com pausa acessível.
+- `components/Hero.tsx`: Hero com ordem natural no HTML.
+- `components/DisciplineTransition.tsx` e `app/discipline.css`: transição tipográfica com preenchimento vermelho guiado pelo scroll.
 - `components/GoalsQuiz.tsx`, `Gallery.tsx` e `TrainingExperience.tsx`: interações preservadas, em chunks separados.
 - `components/CinematicFilm.tsx`: manifesto expansivo, com foto estática e vídeo autorizado opcional.
 - `components/Primitives.tsx`, `Modal.tsx`, `hooks/useCinematicMotion.ts`: elementos compartilhados, diálogos e movimento progressivo.
@@ -94,6 +95,14 @@ A integração e sua validação estão descritas em `docs/PHOTOGRAPHY.md`.
 
 ## Correção da Hero desktop e mobile
 
-O diagnóstico, a consolidação do CSS e os testes com carregamento atrasado estão em `docs/HERO_CORRECTION.md`. A versão mobile segue identificação, título, subtítulo, CTA, fotografia e continuidade, sem depender de `order` ou altura fixa. A faixa pode ser pausada e fica estática quando há preferência por movimento reduzido.
+O diagnóstico, a consolidação do CSS e os testes com carregamento atrasado estão em `docs/HERO_CORRECTION.md`. A versão mobile segue identificação, título, subtítulo, CTA, fotografia e continuidade, sem depender de `order` ou altura fixa. A antiga faixa foi removida; a transição “Disciplina em movimento” é descrita abaixo.
 
 O contato informado ativa os CTAs, a mensagem personalizada do questionário, o botão flutuante acessível e o link de WhatsApp do rodapé. Os testes interceptam a navegação ao WhatsApp: não enviam mensagens reais.
+
+## Disciplina em movimento
+
+Entre a Hero e Sobre, uma transição de fundo #08090B apresenta DISCIPLINA em contorno. Durante a rolagem normal, uma camada vermelha preenche a palavra e uma linha de 1 px acompanha o progresso. A frase de apoio é “A EVOLUÇÃO É CONSTRUÍDA TODOS OS DIAS.”
+
+A animação usa o único requestAnimationFrame já existente em `useCinematicMotion`, sem biblioteca nova, autoplay ou scroll preso. No celular, a seção é compacta e a revelação percorre uma distância menor de scroll. Com movimento reduzido, a palavra e a linha ficam preenchidas de forma estática. Sem JavaScript, o contorno e a frase continuam visíveis.
+
+O componente marquee anterior, sua lógica de pausa, as cópias repetidas, os símbolos e os estilos de loop foram removidos. A Hero, as fotos e as funcionalidades comerciais foram preservadas. Os novos testes estão em `tests/discipline.spec.ts`.

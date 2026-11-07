@@ -32,7 +32,7 @@ import {
 
 import CinematicFilm from "./CinematicFilm";
 import Hero from "./Hero";
-import BrandMarquee from "./BrandMarquee";
+import DisciplineTransition from "./DisciplineTransition";
 import dynamic from "next/dynamic";
 import { Wordmark, Eyebrow, SectionTitle, ContactButton } from "./Primitives";
 import Modal from "./Modal";
@@ -782,7 +782,7 @@ export default function LandingPage() {
       <Navbar contact={() => contact()} />
       <main id="main">
         <Hero contact={() => contact()} />
-        <BrandMarquee />
+        <DisciplineTransition />
         <AboutTrainer />
         <Services contact={contact} />
         <Method contact={() => contact()} />

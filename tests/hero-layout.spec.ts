@@ -106,41 +106,6 @@ test("animações mantêm a ordem e não deslocam o layout após a abertura", as
   });
 });
 
-test("faixa contínua pode ser pausada e respeita movimento reduzido", async ({
-  page,
-}) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Pular introdução" }).click();
-  const region = page.getByRole("region", { name: "Identidade MD Nation" }),
-    track = region.locator(".brand-strip-track");
-  await expect(region.locator(".brand-strip-set")).toHaveCount(2);
-  await expect(region.locator(".brand-strip-set").nth(1)).toHaveAttribute(
-    "aria-hidden",
-    "true",
-  );
-  await expect(track).toHaveCSS("animation-play-state", "running");
-  await region.getByRole("button", { name: "Pausar faixa" }).click();
-  await expect(track).toHaveCSS("animation-play-state", "paused");
-  const paused = await track.evaluate(
-    (el) => el.getAnimations()[0].currentTime,
-  );
-  await page.evaluate(
-    () =>
-      new Promise<void>((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-      ),
-  );
-  expect(await track.evaluate((el) => el.getAnimations()[0].currentTime)).toBe(
-    paused,
-  );
-  await region.getByRole("button", { name: "Retomar faixa" }).click();
-  await expect(track).toHaveCSS("animation-play-state", "running");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(track).toHaveCSS("animation-name", "none");
-  await expect(region.getByRole("button")).toHaveCount(0);
-  await expect(region.locator(".brand-strip-set").first()).toBeVisible();
-});
-
 for (const width of [851, 1024, 1440, 1920]) {
   test(`título inteiro permanece fora da área da fotografia em ${width}px`, async ({
     page,
@@ -172,13 +137,12 @@ for (const width of [851, 1024, 1440, 1920]) {
       .boundingBox();
     expect(controls!.x + controls!.width).toBeLessThanOrEqual(photo.x - 12);
     await page.evaluate(() => {
-      if(document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      if (document.activeElement instanceof HTMLElement)
+        document.activeElement.blur();
       scrollTo(0, 0);
     });
-    await page
-      .locator(".hero")
-      .screenshot({
-        path: `/workspace/scratch/md-hero-no-overlap-${width}.png`,
-      });
+    await page.locator(".hero").screenshot({
+      path: `/workspace/scratch/md-hero-no-overlap-${width}.png`,
+    });
   });
 }

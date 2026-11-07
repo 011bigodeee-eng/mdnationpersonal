@@ -301,62 +301,6 @@ html[data-md-intro="skip"] .hero h1 > em {
 html[data-md-intro="skip"] .hero-visual {
   animation: hero-photo-in 0.65s ease backwards;
 }
-/* Equal, adjacent copies make the tape loop without a jump. */
-.brand-strip {
-  position: relative;
-  overflow: hidden;
-  background: #111216;
-  border-top: 1px solid #ffffff12;
-  border-bottom: 1px solid #ffffff20;
-  padding: 19px 0;
-  color: #c9cbd3;
-}
-.brand-strip-track {
-  display: flex;
-  width: max-content;
-  animation: brand-tape 32s linear infinite;
-  will-change: transform;
-}
-.brand-strip-track.is-paused,
-.brand-strip-track:hover {
-  animation-play-state: paused;
-}
-.brand-strip-set {
-  display: flex;
-  align-items: center;
-  gap: 42px;
-  padding-right: 42px;
-  flex-shrink: 0;
-}
-.brand-strip-item {
-  display: flex;
-  align-items: center;
-  gap: 42px;
-  font: 600 15px var(--display);
-  letter-spacing: 2.4px;
-  white-space: nowrap;
-}
-.brand-strip-item i {
-  font-size: 18px;
-  font-style: normal;
-  color: #ff4650;
-}
-.brand-strip-toggle {
-  position: absolute;
-  z-index: 2;
-  right: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 34px;
-  height: 34px;
-  border: 1px solid #ffffff25;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111216ed;
-  color: #d9dce3;
-}
 @media (min-width: 1600px) {
   .hero {
     height: 920px;
@@ -524,20 +468,6 @@ html[data-md-intro="skip"] .hero-visual {
   .scroll-line {
     height: 18px;
   }
-  .brand-strip {
-    padding: 17px 0;
-  }
-  .brand-strip-set,
-  .brand-strip-item {
-    gap: 30px;
-  }
-  .brand-strip-set {
-    padding-right: 30px;
-  }
-  .brand-strip-item {
-    font-size: 14px;
-    letter-spacing: 2px;
-  }
 }
 @media (max-width: 680px) {
   .header .nav-shell {
@@ -630,25 +560,6 @@ html[data-md-intro="skip"] .hero-visual {
   .scroll-cue svg {
     width: 13px;
   }
-  .brand-strip {
-    padding: 16px 0;
-  }
-  .brand-strip-item {
-    font-size: 13px;
-    letter-spacing: 1.7px;
-  }
-  .brand-strip-set,
-  .brand-strip-item {
-    gap: 27px;
-  }
-  .brand-strip-set {
-    padding-right: 27px;
-  }
-  .brand-strip-toggle {
-    width: 32px;
-    height: 32px;
-    right: 6px;
-  }
 }
 @media (max-width: 360px) {
   .hero-content {
@@ -707,31 +618,6 @@ html[data-md-intro="skip"] .hero-visual {
   .scroll-line:after {
     animation: none !important;
   }
-  .brand-strip-track {
-    animation: none !important;
-    transform: none !important;
-    width: 100%;
-    display: block;
-    will-change: auto;
-  }
-  .brand-strip-set {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 13px 25px;
-    padding: 0 20px;
-  }
-  .brand-strip-set[aria-hidden="true"],
-  .brand-strip-toggle,
-  .brand-strip-item i {
-    display: none;
-  }
-  .brand-strip-item {
-    font-size: 13px;
-    letter-spacing: 1.3px;
-    white-space: normal;
-    max-width: 100%;
-  }
 }
 @keyframes hero-title-in {
   from {
@@ -755,18 +641,6 @@ html[data-md-intro="skip"] .hero-visual {
   to {
     top: 100%;
   }
-}
-@keyframes brand-tape {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.brand-strip-set {
-  min-width: 100vw;
-  justify-content: space-around;
 }
 @media (min-width: 1600px) {
   .hero {
