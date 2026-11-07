@@ -95,15 +95,19 @@
 .hero-actions {
   display: flex;
   align-items: center;
-  gap: 27px;
+  gap: 24px;
 }
 .hero-actions > .button {
   min-height: 57px;
   padding: 17px 23px;
-  font-size: 10px;
-  gap: 25px;
-  box-shadow: 0 9px 36px #e5091426;
-  border-color: #f72b35;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: 0.35px;
+  gap: 24px;
+  background: linear-gradient(135deg, #f01220, #cf0612);
+  box-shadow: inset 0 1px 0 #ffffff24, 0 8px 24px #e509141c;
+  border-color: #ff3540;
 }
 .hero-actions > .button:hover {
   box-shadow: 0 12px 40px #e5091440;
@@ -113,22 +117,34 @@
   align-items: center;
   gap: 11px;
   min-height: 44px;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.55px;
   white-space: nowrap;
 }
 .hero-play {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ffffff50;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: #ffffff04;
+  border: 1px solid #ffffff60;
   border-radius: 50%;
   transition:
     background 0.25s,
     border-color 0.25s;
+}
+.hero-actions > .button > svg {
+  flex-shrink: 0;
+  stroke-width: 1.75;
+}
+.hero-actions > .button:focus-visible,
+.hero-method-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
 }
 .hero-method-link:hover .hero-play {
   background: #e50914;
