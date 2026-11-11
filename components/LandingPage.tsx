@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import TrainingPractice from "./TrainingPractice";
+import "@/app/online-services.css";
 import { trapDialogFocus } from "@/lib/accessibility";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -11,7 +12,6 @@ import {
   Menu,
   X,
   Dumbbell,
-  Monitor,
   ClipboardList,
   TrendingUp,
   Check,
@@ -271,71 +271,38 @@ function AboutTrainer() {
   );
 }
 function Services({ contact }: { contact: (message?: string) => void }) {
+  const online = services[0];
+  const planning = services[1];
   return (
-    <section id="acompanhamento" className="section services">
+    <section id="acompanhamento" className="section services online-services" aria-labelledby="online-service-title">
       <div className="container">
-        <div className="section-heading reveal">
+        <article className="online-service-feature reveal" data-tilt>
+          <div className="online-service-copy">
+            <Eyebrow>ACOMPANHAMENTO / ONDE VOCÊ ESTIVER</Eyebrow>
+            <h2 id="online-service-title" className="display">Consultoria <em>Online</em></h2>
+            <p className="online-service-statement">Sua evolução não depende de onde você está.</p>
+            <p className="online-service-description">{online.description}</p>
+            <button className="button service-link online-service-cta" onClick={() => contact("Olá, Matheus! Gostaria de saber mais sobre a Consultoria Online da MD Nation.")}>
+              QUERO MINHA CONSULTORIA ONLINE <ArrowUpRight size={20} />
+            </button>
+          </div>
+          <div className="online-service-image">
+            <Image src={online.image} alt={online.imageAlt} width={714} height={724} sizes="(max-width: 760px) 92vw, 45vw" />
+            <span>ESTRATÉGIA QUE ACOMPANHA A SUA ROTINA.</span>
+          </div>
+        </article>
+        <article className="online-service-planning reveal">
+          <div className="online-planning-image">
+            <Image src={planning.image} alt={planning.imageAlt} width={714} height={724} sizes="(max-width: 760px) 92vw, 180px" />
+          </div>
           <div>
-            <Eyebrow>ENCONTRE O SEU CAMINHO</Eyebrow>
-            <SectionTitle>
-              NÃO EXISTE
-              <br />
-              <em>UMA ÚNICA FORMA.</em>
-            </SectionTitle>
+            <h3>{planning.title}</h3>
+            <p>{planning.description}</p>
           </div>
-          <div className="heading-aside">
-            <p>
-              O seu objetivo é único.
-              <br />A conversa começa por ele.
-            </p>
-            <span className="demo-tag">
-              MODALIDADES ILUSTRATIVAS · CONSULTE DISPONIBILIDADE
-            </span>
-          </div>
-        </div>
-        <div className="services-grid">
-          {services.map((service, i) => {
-            const Icon =
-              service.icon === "dumbbell"
-                ? Dumbbell
-                : service.icon === "monitor"
-                  ? Monitor
-                  : ClipboardList;
-            return (
-              <article
-                className={`service-card service-card-${i + 1} reveal`}
-                key={service.title}
-                data-tilt
-              >
-                <div className="service-photo">
-                  <Image
-                    src={service.image}
-                    alt={service.imageAlt}
-                    fill
-                    sizes="(max-width:680px) 100vw, (max-width:1024px) 50vw, 40vw"
-                  />
-                  <span className="service-number">0{i + 1}</span>
-                  <span className="service-card-label">{service.tag}</span>
-                </div>
-                <div className="service-copy">
-                  <Icon size={22} />
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                  <button
-                    className="service-link"
-                    onClick={() =>
-                      contact(
-                        `Olá, Matheus! Conheci a MD Nation e gostaria de confirmar a disponibilidade de ${service.title.toLowerCase()} e saber mais.`,
-                      )
-                    }
-                  >
-                    SOLICITAR INFORMAÇÕES <ArrowUpRight size={22} />
-                  </button>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+          <button className="service-link" onClick={() => contact(`Olá, Matheus! Conheci a MD Nation e gostaria de confirmar a disponibilidade de ${planning.title.toLowerCase()} e saber mais.`)}>
+            SOLICITAR INFORMAÇÕES <ArrowUpRight size={20} />
+          </button>
+        </article>
       </div>
     </section>
   );

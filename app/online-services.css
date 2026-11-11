@@ -1,0 +1,34 @@
+.online-services .online-service-feature { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(30px, 5vw, 80px); align-items: center; transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform .4s ease; }
+.online-service-copy { min-width: 0; }
+.online-services .display { font-size: clamp(60px, 6.5vw, 100px); line-height: .95; margin: 28px 0; }
+.online-service-copy .display em { display: block; color: var(--red); font-style: normal; }
+.online-service-statement { font-size: clamp(21px, 2vw, 28px); line-height: 1.4; color: var(--white); max-width: 28ch; margin: 0 0 22px; }
+.online-service-description { color: #b4b6bc; font-size: 15px; line-height: 1.85; max-width: 55ch; margin-bottom: 32px; }
+.online-services .online-service-cta { background: var(--red); color: #fff; padding: 20px 24px; border: 1px solid var(--red); font-size: 11px; letter-spacing: .06em; gap: 18px; justify-content: space-between; line-height: 1.6; max-width: 100%; }
+.online-services .online-service-cta:hover { background: #bc0710; }
+.online-services .online-service-cta svg { color: #fff; }
+.online-service-image { position: relative; min-width: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.online-service-image img { display: block; width: 100%; height: auto; }
+.online-service-image > span { display: block; padding: 18px 20px; border-top: 1px solid var(--line); font-size: 9px; letter-spacing: .13em; color: #c5c6ca; background: #17181d; }
+.online-service-planning { display: grid; grid-template-columns: 150px 1fr auto; align-items: center; gap: 30px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.online-planning-image { height: 115px; overflow: hidden; border-radius: 4px; }
+.online-planning-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.online-service-planning h3 { font-size: 21px; margin: 0 0 10px; }
+.online-service-planning p { color: #b4b6bc; font-size: 14px; max-width: 45ch; margin: 0; line-height: 1.7; }
+.online-service-planning .service-link { font-size: 10px; gap: 12px; }
+@media (max-width: 1000px) { .online-service-planning { grid-template-columns: 120px 1fr; gap: 22px; } .online-service-planning .service-link { grid-column: 2; justify-self: start; margin-top: 0; } }
+@media (max-width: 760px) {
+  .online-services .online-service-feature { grid-template-columns: 1fr; gap: 32px; transform: none; }
+  .online-service-copy .eyebrow { font-size: 9px; letter-spacing: .08em; }
+  .online-services .display { font-size: clamp(58px, 15vw, 86px); }
+  .online-service-statement { font-size: 23px; }
+  .online-service-description { font-size: 14px; }
+  .online-services .online-service-cta { width: 100%; padding: 18px 16px; font-size: 10px; gap: 12px; }
+  .online-service-cta svg { flex-shrink: 0; }
+  .online-service-planning { grid-template-columns: 90px 1fr; gap: 20px; margin-top: 36px; padding-top: 26px; }
+  .online-planning-image { height: 100px; }
+  .online-service-planning h3 { font-size: 18px; }
+  .online-service-planning p { font-size: 13px; }
+  .online-service-planning .service-link { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) { .online-services .online-service-feature { transform: none; transition: none; } }

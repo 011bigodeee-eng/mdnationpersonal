@@ -95,7 +95,7 @@ test("movimento real progride sem bloquear a rolagem; modo reduzido continua leg
     )
     .toBeGreaterThan(0);
   await expect(method.locator(".step-active").first()).toBeVisible();
-  const card = page.locator(".service-card").first();
+  const card = page.locator(".online-service-feature");
   await card.scrollIntoViewIfNeeded();
   const box = (await card.boundingBox())!;
   await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.4);

@@ -20,26 +20,17 @@ export function whatsappUrl(message = client.message) {
 }
 export const services = [
   {
-    title: "Personal presencial",
-    tag: "01 / LADO A LADO",
+    title: "Consultoria Online",
+    tag: "ONDE VOCÊ ESTIVER",
     description:
-      "A possibilidade de ter orientação próxima, com atenção ao movimento e ao seu processo.",
-    image: "/images/service-strength.webp",
-    imageAlt: "Halter sobre piso de academia.",
-    icon: "dumbbell",
-  },
-  {
-    title: "Consultoria online",
-    tag: "02 / ONDE VOCÊ ESTIVER",
-    description:
-      "Orientação à distância para aproximar seu objetivo da sua rotina, onde você estiver.",
+      "Treinamento individualizado, planejamento estratégico e acompanhamento direcionado aos seus objetivos. Uma consultoria desenvolvida para quem busca evolução física, condicionamento e performance esportiva, com a flexibilidade de treinar onde estiver.",
     image: "/images/service-online.webp",
     imageAlt: "Notebook em um ambiente de treinamento.",
     icon: "monitor",
   },
   {
     title: "Planejamento personalizado",
-    tag: "03 / SEU PRÓXIMO PASSO",
+    tag: "SEU PRÓXIMO PASSO",
     description:
       "Uma proposta de planejamento que considera objetivos, experiência e rotina.",
     image: "/images/service-plan.webp",
