@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import TrainingPractice from "./TrainingPractice";
 import { trapDialogFocus } from "@/lib/accessibility";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -719,6 +720,7 @@ export default function LandingPage() {
         <Hero contact={() => contact()} />
         <DisciplineTransition />
         <AboutTrainer />
+        <TrainingPractice />
         <Services contact={contact} />
         <Method contact={() => contact()} />
         <Results />
