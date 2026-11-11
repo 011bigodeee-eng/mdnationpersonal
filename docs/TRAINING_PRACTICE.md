@@ -1,13 +1,13 @@
-# Treinamento na Prática
+# Registros da Jornada — Jackson
 
-Seção inserida após Quem Sou Eu, em `components/TrainingPractice.tsx`, com estilos isolados em `app/training-practice.css`.
+A seção existente após Quem Sou Eu foi consolidada em Registros da Jornada, preservando a paleta, tipografia, bordas discretas e revelação por scroll. A antiga apresentação Treinamento na Prática foi substituída no mesmo local, sem uma segunda galeria.
 
-As quatro imagens enviadas foram examinadas individualmente. A cena de jiu-jítsu em ação recebe maior destaque por mostrar o movimento e o contexto completo. O retrato fechado complementa a cena; a montagem original permanece íntegra como registro pessoal, sem promessas de transformação ou resultados atribuídos. O retrato horizontal no tatame encerra a composição.
+O cliente confirmou a remoção das fotos “01 / Em movimento” (acao.webp) e “02 / Foco nos detalhes” (foco.webp). Elas não são mais renderizadas; os arquivos originais e derivados permanecem arquivados. Nenhuma foto de outra seção foi removida. “Além do exercício” continua como registro complementar, sem identificação como Jackson.
 
-Originais intactos e hashes SHA-256 estão em `assets/originals/practice/`. Os WebP mantêm as dimensões e proporções originais, sem retoque, ampliação ou remoção das marcas do fotógrafo. A compressão usa qualidade 85; Next Image fornece derivados responsivos com carregamento lazy. Os quatro WebP somam aproximadamente 337 KiB.
+O cliente confirmou que a montagem trajetoria.webp corresponde ao Jackson. O destaque usa o título “Um dos nossos resultados”, o subtítulo fornecido e a identificação Jackson. A montagem original aparece completa, sem separação ou rótulos de antes e depois, pois não há cronologia confirmada. Não foram acrescentados medidas, prazos, depoimentos ou promessas.
 
-Desktop: grade assimétrica com imagem principal vertical e três imagens complementares em escalas diferentes. Mobile: sequência vertical de largura ampla, respeitando as proporções naturais. Nenhuma imagem é forçada a preencher uma caixa com corte. Contraste e saturação recebem ajustes discretos por CSS; o hover amplia apenas 1,2% e funciona somente em dispositivos com hover. A revelação usa o IntersectionObserver existente; movimento reduzido desativa efeitos.
+As capturas recebidas neste pedido serviram apenas como referência para identificar as fotos a remover; não são publicadas como fotografias. O WebP existente da montagem é reutilizado, com dimensões 1170 × 1170, tamanhos responsivos e carregamento lazy. Não houve edição corporal, retoque ou ampliação.
 
-Capturas revisadas: `/workspace/scratch/practice-390.png`, `/workspace/scratch/practice-768.png` e `/workspace/scratch/practice-1440.png`. Os testes da seção verificam posição no documento, carregamento, proporção das quatro imagens, destaque principal e ausência de overflow em 320, 390, 768 e 1440 px.
+Desktop: montagem grande com apresentação editorial ao lado. Mobile: identificação e texto precedem a montagem completa. O registro complementar mantém sua proporção original. A revelação existente respeita movimento reduzido.
 
-Validação concluída: lint, TypeScript, build de produção e `git diff --check` aprovados. Os 54 testes de navegador passaram, incluindo acessibilidade, WhatsApp, questionário, menu, animações e responsividade. Alterações ainda locais, sem publicação.
+Validação: lint, TypeScript, build de produção e 54 testes de navegador aprovados, incluindo as remoções confirmadas, identificação do Jackson, proporção das imagens, responsividade, acessibilidade e WhatsApp. Capturas revisadas em `/workspace/scratch/jackson-1440.png` e `/workspace/scratch/jackson-390.png`. Alterações locais, sem publicação.

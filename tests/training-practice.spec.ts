@@ -1,14 +1,14 @@
 import { test, expect } from "@playwright/test";
 
 for (const width of [320, 390, 768, 1440]) {
-  test(`galeria editorial preserva as quatro fotos em ${width}px`, async ({ page }) => {
+  test(`registros preservam Jackson e removem as fotos confirmadas em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
-    const section = page.locator("#treinamento-na-pratica");
+    const section = page.locator("#registros-da-jornada");
     expect(await section.evaluate(el => el.previousElementSibling?.id)).toBe("sobre");
-    await expect(section.getByRole("heading", { level: 2 })).toHaveText("Treinamento na Prática");
-    await expect(section.locator("img")).toHaveCount(4);
+    await expect(section.getByRole("heading", { level: 2 })).toHaveText("Registros da Jornada");
+    await expect(section.locator("img")).toHaveCount(2);
     for (const image of await section.locator("img").all()) {
       await image.scrollIntoViewIfNeeded();
       await image.evaluate(el => (el as HTMLImageElement).decode());
@@ -21,11 +21,10 @@ for (const width of [320, 390, 768, 1440]) {
       expect(Math.abs(geometry.ratio - geometry.original)).toBeLessThan(.01);
       expect(geometry.loading).toBe("lazy");
     }
-    if (width >= 1000) {
-      const main = (await section.locator(".practice-photo--acao img").boundingBox())!;
-      const secondary = (await section.locator(".practice-photo--foco img").boundingBox())!;
-      expect(main.width).toBeGreaterThan(secondary.width * 1.5);
-    }
+    await expect(section.locator('img[src*="acao.webp"], img[src*="foco.webp"]')).toHaveCount(0);
+    await expect(section.getByRole("heading", { level: 3 })).toHaveText("Um dos nossos resultados");
+    await expect(section.locator(".jackson-name")).toHaveText("Jackson");
+    await expect(section).not.toContainText(/antes|depois|%/i);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   });
 }
