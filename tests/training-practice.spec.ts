@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 for (const width of [320, 390, 768, 1440]) {
-  test(`registros preservam Jackson e removem as fotos confirmadas em ${width}px`, async ({ page }) => {
+  test(`registros apresentam o resultado sem nome e removem as fotos confirmadas em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
@@ -23,7 +23,8 @@ for (const width of [320, 390, 768, 1440]) {
     }
     await expect(section.locator('img[src*="acao.webp"], img[src*="foco.webp"]')).toHaveCount(0);
     await expect(section.getByRole("heading", { level: 3 })).toHaveText("Um dos nossos resultados");
-    await expect(section.locator(".jackson-name")).toHaveText("Jackson");
+    await expect(section).not.toContainText(/Jackson/i);
+    await expect(section.locator(".journey-result img")).not.toHaveAttribute("alt", /Jackson/i);
     await expect(section).not.toContainText(/antes|depois|%/i);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   });

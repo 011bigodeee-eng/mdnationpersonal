@@ -13,18 +13,17 @@ export default function TrainingPractice() {
           </div>
           <p>Cada pessoa tem um ponto de partida. Cada objetivo exige uma estratégia.</p>
         </div>
-        <div className="journey-result" aria-labelledby="jackson-title">
-          <figure className="practice-photo jackson-photo reveal">
+        <div className="journey-result" aria-labelledby="journey-result-title">
+          <figure className="practice-photo reveal">
             <div className="practice-image-frame">
-              <Image src="/images/practice/trajetoria.webp" width={1170} height={1170} alt="Jackson em dois registros pessoais reunidos na montagem original fornecida pelo cliente." quality={85} sizes="(max-width: 700px) 92vw, 55vw" />
+              <Image src="/images/practice/trajetoria.webp" width={1170} height={1170} alt="Dois registros pessoais reunidos na montagem original fornecida pelo cliente." quality={85} sizes="(max-width: 700px) 92vw, 55vw" />
             </div>
-            <figcaption>JACKSON / REGISTROS DA JORNADA</figcaption>
+            <figcaption>REGISTROS DA JORNADA</figcaption>
           </figure>
-          <div className="jackson-copy reveal">
+          <div className="journey-result-copy reveal">
             <Eyebrow>EVOLUÇÃO COM ESTRATÉGIA</Eyebrow>
-            <h3 id="jackson-title" className="display">Um dos nossos <em>resultados</em></h3>
+            <h3 id="journey-result-title" className="display">Um dos nossos <em>resultados</em></h3>
             <p>Conheça um dos resultados que fazem parte da nossa jornada.</p>
-            <span className="jackson-name">Jackson</span>
           </div>
         </div>
         <figure className="practice-photo journey-complement reveal">
