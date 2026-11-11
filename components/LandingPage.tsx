@@ -287,7 +287,7 @@ function Services({ contact }: { contact: (message?: string) => void }) {
             </button>
           </div>
           <div className="online-service-image">
-            <Image src={online.image} alt={online.imageAlt} width={714} height={724} sizes="(max-width: 760px) 92vw, 45vw" />
+            <Image src={online.image} alt={online.imageAlt} width={714} height={724} sizes="(max-width: 900px) 92vw, 45vw" />
             <span>ESTRATÉGIA QUE ACOMPANHA A SUA ROTINA.</span>
           </div>
         </article>

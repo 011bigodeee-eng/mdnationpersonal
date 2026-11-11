@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-for (const width of [320, 390, 768, 1440]) {
+for (const width of [320, 390, 430, 768, 1440]) {
   test(`consultoria online em destaque e contato correto em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -27,6 +27,12 @@ for (const width of [320, 390, 768, 1440]) {
       await image.evaluate(el => (el as HTMLImageElement).decode());
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    if (width <= 900) {
+      const photo = (await section.locator(".online-service-image img").boundingBox())!;
+      expect(photo.height).toBeLessThanOrEqual(280);
+      const title = await section.locator("h2").evaluate(el => parseFloat(getComputedStyle(el).fontSize));
+      expect(title).toBeLessThanOrEqual(64);
+    }
     const bounds = (await button.boundingBox())!;
     expect(bounds.x).toBeGreaterThanOrEqual(0);
     expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
