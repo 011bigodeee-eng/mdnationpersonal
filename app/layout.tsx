@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./hero.css";
+import "./trainer-story.css";
 import "./discipline.css";
 import "./experience.css";
 import localFont from "next/font/local";

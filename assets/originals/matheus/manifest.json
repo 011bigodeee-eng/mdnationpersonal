@@ -16,5 +16,25 @@
     "original_sha256": "845fedcaf5c7c6e6321ae16398547c5bcdaf8e1403db3d41d976afe3ca9453c9",
     "webp_bytes": 426810,
     "pixels_preserved": true
+  },
+  {
+    "original": "849807344_1129042793087925_2231759326871032491_n.jpg",
+    "webp": "matheus-trajetoria.webp",
+    "width": 1170,
+    "height": 1514,
+    "original_sha256": "7d667b2a79f2f5bb614b7f4df227c7c45a31e75ba7aa345936c2dacbc1756b69",
+    "webp_bytes": 107860,
+    "pixels_preserved": false,
+    "processing": "WebP quality 88; original framing and dimensions; no retouch"
+  },
+  {
+    "original": "894204704_2082028509117106_5872407303367325020_n.jpg",
+    "webp": "matheus-vivencia.webp",
+    "width": 1200,
+    "height": 1600,
+    "original_sha256": "87a2a7fb64260d7e255e614e23da191253de2f911cb2227b9b84b60b7f31a29b",
+    "webp_bytes": 457636,
+    "pixels_preserved": false,
+    "processing": "WebP quality 88; original framing and dimensions; no retouch"
   }
 ]

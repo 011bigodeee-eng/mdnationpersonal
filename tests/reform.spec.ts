@@ -136,7 +136,7 @@ test("editorial sem placeholders vazios e com repetição limitada às fotos rea
   for (const source of sources)
     counts.set(source!, (counts.get(source!) ?? 0) + 1);
   for (const [source, count] of counts)
-    expect(count).toBe(source.startsWith("/images/matheus/") ? 2 : 1);
+    expect(count).toBe(source === "/images/matheus/matheus-hero.webp" ? 2 : 1);
   await expect(page.locator(".gallery-item--real")).toHaveCount(2);
   await expect(page.locator(".cinematic-film h2")).toContainText(
     "NÃO ACONTECE",

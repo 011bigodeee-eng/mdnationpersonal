@@ -1,0 +1,40 @@
+.trainer-story { overflow: clip; }
+.trainer-story-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
+.trainer-story-copy .display { font-size: clamp(42px, 4.3vw, 66px); line-height: 1.04; letter-spacing: -.025em; margin: 22px 0 32px; }
+.trainer-story-copy .display em { display: block; color: var(--red); font-style: normal; }
+.trainer-story-copy > p { font-size: 15px; line-height: 1.85; color: #aeb0b4; margin-bottom: 20px; max-width: 57ch; }
+.trainer-story-copy > .trainer-story-intro { font-size: 17px; color: #c5c6ca; }
+.trainer-story-copy strong { color: #f2f2f3; font-weight: 500; }
+.trainer-pillars { margin: 34px 0; border-top: 1px solid var(--line); }
+.trainer-pillar { display: flex; gap: 22px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.trainer-pillar > span { color: var(--red-light); font-size: 12px; padding-top: 5px; }
+.trainer-pillar h3 { font-size: 16px; font-weight: 600; margin: 0 0 7px; }
+.trainer-pillar p { font-size: 13px; line-height: 1.7; color: #aeb0b4; margin: 0; }
+.trainer-story-visual { position: relative; padding: 12px 0 0 22px; }
+.trainer-story-visual figure { margin: 0; }
+.trainer-portrait { position: relative; }
+.trainer-photo-frame { overflow: hidden; border: 1px solid #ffffff18; background: #17191c; }
+.trainer-photo-frame img, .trainer-companion img { width: 100%; height: auto; display: block; filter: contrast(1.025) saturate(.94); transition: filter .6s ease; }
+.trainer-portrait figcaption { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; font-size: 9px; letter-spacing: .13em; color: #9c9da1; }
+.trainer-portrait figcaption span:first-child { color: #eee; }
+.trainer-story-visual .trainer-companion { position: relative; width: 59%; margin: 26px 0 0 -22px; padding: 8px; background: #17191c; border: 1px solid #ffffff1a; box-shadow: 16px 20px 50px #0005; transform: rotate(-3deg); }
+.trainer-companion figcaption { font-size: 8px; letter-spacing: .1em; color: #b7b7bc; padding: 12px 4px 4px; line-height: 1.6; }
+.trainer-quote { position: relative; border-left: 2px solid var(--red); margin: 40px 0 0 20%; padding: 5px 0 5px 22px; }
+.trainer-quote > span { font-size: 9px; letter-spacing: .16em; color: #a5a5aa; }
+.trainer-quote p { font-family: var(--font-display), sans-serif; font-size: clamp(30px, 3vw, 44px); line-height: 1.1; text-transform: uppercase; margin: 14px 0 0; }
+.trainer-quote em { color: var(--red); font-style: normal; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .trainer-story-visual figure:hover img { filter: contrast(1.025) saturate(1); } }
+@media (max-width: 1000px) and (min-width: 761px) { .trainer-story-grid { gap: 30px; } .trainer-story-copy .display { font-size: 43px; } .trainer-story-copy > p { font-size: 14px; } .trainer-story-visual { padding-left: 0; } }
+@media (max-width: 760px) {
+  .trainer-story-grid { grid-template-columns: 1fr; gap: 44px; }
+  .trainer-story-copy .display { font-size: clamp(38px, 8.5vw, 58px); margin-bottom: 26px; }
+  .trainer-story-copy > p { font-size: 14px; line-height: 1.8; }
+  .trainer-story-copy > .trainer-story-intro { font-size: 16px; }
+  .trainer-story-copy .eyebrow { font-size: 9px; letter-spacing: .1em; }
+  .trainer-story-visual { padding: 0; }
+  .trainer-story-visual .trainer-companion { margin: 26px 0 0 8px; width: 61%; }
+  .trainer-quote { margin: 34px 0 0 12%; padding-left: 18px; }
+  .trainer-quote p { font-size: 36px; }
+  .trainer-pillar { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .trainer-story-visual img { transition: none; } .trainer-story-visual .trainer-companion { transform: none; } }

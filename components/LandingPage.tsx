@@ -12,7 +12,6 @@ import {
   Dumbbell,
   Monitor,
   ClipboardList,
-  Target,
   TrendingUp,
   Check,
   Instagram,
@@ -219,110 +218,51 @@ function Navbar({ contact }: { contact: () => void }) {
   );
 }
 function AboutTrainer() {
+  const pillars = [
+    { title: "Treinamento individualizado", text: "Estratégias desenvolvidas considerando as necessidades, capacidades e objetivos de cada pessoa." },
+    { title: "Performance esportiva", text: "Preparação física direcionada a atletas de diferentes modalidades, com foco na evolução do desempenho." },
+    { title: "Evolução com estratégia", text: "Planejamento, análise e acompanhamento para proporcionar uma progressão estruturada." },
+  ];
   return (
-    <section id="sobre" className="section about">
+    <section id="sobre" className="section trainer-story" aria-labelledby="trainer-title">
       <div className="container">
         <div className="editorial-header">
-          <span>01 / O PROFISSIONAL</span>
+          <span>01 / QUEM SOU EU</span>
           <span>MATHEUS DIAS · MD NATION</span>
         </div>
-        <div className="about-grid">
-          <div className="about-copy reveal">
-            <Eyebrow>POR TRÁS DO MOVIMENTO</Eyebrow>
-            <SectionTitle>
-              CONHEÇA
-              <br />
-              MATHEUS <em>DIAS.</em>
-            </SectionTitle>
-            <p className="lead">
-              A disciplina tem muitas formas.
-              <br />A sua jornada é única.
-            </p>
-            <p>
-              {client.trainerBio ??
-                "Personal trainer e coach, Matheus Dias é o profissional por trás da MD Nation. Entre a academia e a vivência esportiva, sua presença dá rosto a uma jornada de treinamento com estratégia, disciplina e atenção ao processo."}
-            </p>
-            <div className="principles">
-              {[
-                {
-                  Icon: Target,
-                  title: "Estratégia",
-                  text: "Um caminho com direção.",
-                },
-                {
-                  Icon: Dumbbell,
-                  title: "Disciplina",
-                  text: "Consistência em cada passo.",
-                },
-                {
-                  Icon: TrendingUp,
-                  title: "Evolução",
-                  text: "Respeito ao seu processo.",
-                },
-              ].map(({ Icon, title, text }, i) => (
-                <div key={title}>
-                  <span className="principle-number">0{i + 1}</span>
-                  <Icon size={21} />
-                  <span>
-                    <strong>{title}</strong>
-                    <small>{text}</small>
-                  </span>
+        <div className="trainer-story-grid">
+          <div className="trainer-story-copy">
+            <div className="reveal">
+              <Eyebrow>UM OLHAR PARA A SUA INDIVIDUALIDADE</Eyebrow>
+              <h2 id="trainer-title" className="display">Muito além do treinamento. <em>Uma estratégia para cada objetivo.</em></h2>
+            </div>
+            <p className="trainer-story-intro reveal">Sou um profissional dedicado a ajudar pessoas de diferentes perfis a alcançarem seus objetivos, desde quem busca melhorar a <strong>saúde, o condicionamento físico e a qualidade de vida</strong> até <strong>atletas de alto rendimento</strong> de diversas modalidades esportivas.</p>
+            <p className="reveal">Meu trabalho é baseado em uma análise individualizada, planejamento estratégico e aplicação de protocolos adequados às necessidades de cada pessoa.</p>
+            <p className="reveal">Acredito que cada objetivo exige um caminho específico. Por isso, desenvolvo estratégias personalizadas para transformar o seu ponto de partida em evolução, desempenho e resultados consistentes.</p>
+            <p className="reveal">Independentemente de onde você está hoje, meu propósito é ajudar você a chegar onde deseja estar.</p>
+            <div className="trainer-pillars">
+              {pillars.map(({ title, text }, i) => (
+                <div className="trainer-pillar reveal" key={title}>
+                  <span aria-hidden="true">0{i + 1}</span>
+                  <div><h3>{title}</h3><p>{text}</p></div>
                 </div>
               ))}
             </div>
-            {client.professionalRegistration && (
-              <p className="registration">
-                Registro profissional: {client.professionalRegistration}
-              </p>
-            )}
-            <a
-              className="text-link"
-              href={client.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              CONHEÇA O MATHEUS NO INSTAGRAM <ArrowUpRight size={18} />
-            </a>
+            {client.professionalRegistration && <p className="registration">Registro profissional: {client.professionalRegistration}</p>}
+            <a className="text-link" href={client.instagram} target="_blank" rel="noopener noreferrer">CONHEÇA O MATHEUS NO INSTAGRAM <ArrowUpRight size={18} /></a>
           </div>
-          <div
-            className={`about-composition reveal ${client.trainerAboutPhoto ? "about-composition--real" : ""}`}
-            data-tilt
-          >
-            <div className="about-art">
-              <Image
-                src={client.trainerAboutPhoto ?? media.about}
-                alt={
-                  client.trainerAboutPhoto
-                    ? "Matheus Dias de quimono branco durante a prática de jiu-jítsu. Fotografia real fornecida pelo cliente."
-                    : "Texturas de cordas em um ambiente de treinamento."
-                }
-                fill
-                sizes="(max-width:680px) 100vw, 45vw"
-                quality={85}
-              />
-              <span className="art-cross">+</span>
-              <span className="about-vertical">
-                VIVÊNCIA ESPORTIVA / JIU-JÍTSU.
-              </span>
-            </div>
-            <div className="about-statement">
-              <span>MD / MINDSET</span>
-              <p>
-                DISCIPLINA QUE
-                <br />
-                <em>ACOMPANHA O MOVIMENTO.</em>
-              </p>
-              <small>
-                {client.trainerAboutPhoto
-                  ? "MATHEUS DIAS · FOTOGRAFIA REAL"
-                  : "MD NATION"}
-              </small>
-            </div>
-            <span className="about-caption">
-              {client.trainerBio
-                ? "UMA JORNADA COM DIREÇÃO."
-                : "FORMAÇÃO E REGISTRO PROFISSIONAL A CONFIRMAR"}
-            </span>
+          <div className="trainer-story-visual">
+            <figure className="trainer-portrait reveal">
+              <div className="trainer-photo-frame">
+                <Image src="/images/matheus/matheus-trajetoria.webp" alt="Matheus em pose esportiva, em fotografia real fornecida pelo cliente." width={1170} height={1514} sizes="(max-width: 760px) 92vw, 42vw" quality={85} />
+              </div>
+              <figcaption><span>MATHEUS DIAS</span><span>VIVÊNCIA / DEDICAÇÃO</span></figcaption>
+            </figure>
+            <figure className="trainer-companion reveal">
+              <Image src="/images/matheus/matheus-vivencia.webp" alt="Registro pessoal fornecido pelo cliente: duas pessoas ao lado de um veículo, com um troféu." width={1200} height={1600} sizes="(max-width: 760px) 55vw, 24vw" quality={85} />
+              <figcaption>O ESPORTE FAZ PARTE DA JORNADA.</figcaption>
+            </figure>
+            <blockquote className="trainer-quote reveal"><span>PROPÓSITO EM CADA ETAPA</span><p>Do seu ponto de partida ao seu <em>próximo nível.</em></p></blockquote>
           </div>
         </div>
       </div>

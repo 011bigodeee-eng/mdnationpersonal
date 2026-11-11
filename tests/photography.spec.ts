@@ -9,9 +9,9 @@ for (const width of [320, 360, 375, 390, 430, 768, 1440, 1920]) {
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
     const hero = page.locator(".hero-image"),
-      about = page.locator(".about-art img");
+      about = page.locator(".trainer-portrait img");
     await expect(hero).toHaveAttribute("src", /matheus-hero/);
-    await expect(about).toHaveAttribute("src", /matheus-sobre/);
+    await expect(about).toHaveAttribute("src", /matheus-trajetoria/);
     for (const image of [hero, about]) {
       await image.scrollIntoViewIfNeeded();
       await image.evaluate((img) => (img as HTMLImageElement).decode());
